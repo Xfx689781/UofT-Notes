@@ -1,0 +1,786 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+\usepackage{hyperref}
+\usepackage{esint}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[margin=1.4in]{geometry}
+
+
+% ===== theorem style =====
+\theoremstyle{definition}
+
+\newtheorem{definition}{Definition}[subsection]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{corollary}[definition]{Corollary}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{MAT237 Notes}
+\author{Fuxuan Xu}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\section{Topology on $\mathbb{R}^n$}
+\subsection{Interior, Boundary and Limit Points}
+\begin{definition}[Interior Point]
+Let $A \subset \mathbb{R}^n$ be a set. A point $p \in \mathbb{R}^n$
+is an interior point of $A$ if there exists $\varepsilon > 0$
+such that
+\[
+B_\varepsilon(p) \subset A.
+\]
+\end{definition}
+\begin{definition}[Interior]
+Let $A \subset \mathbb{R}^n$ be a set. The interior of A, denoted $A^o$ or $int(A)$, is the set of all the interior points of A.
+\end{definition}
+\begin{lemma}
+    Let $A$ and $B$ be sets of $\mathbb{R}^n$. Then:
+    \begin{enumerate}[label=(\alph*), nosep]
+        \item $A^o \subseteq A$
+        \item $(A \cup B)^o \supseteq A^o \cup B^o$
+        \item $(A \cap B)^o = A^o \cap B^o$
+        \item $(A \times B)^o = A^o \times B^o$
+    \end{enumerate}
+\end{lemma}
+\begin{definition}[Boundary Point]
+Let $A \subset \mathbb{R}^n$ be a set. A point $p\in \mathbb{R}^n$ is a boundary point if for every $\varepsilon > 0$, the set $\[B_\varepsilon(p)\cap A\neq \emptyset$ and $\[B_\varepsilon(p)\cap A^c\neq \emptyset$.
+\end{definition}
+\begin{definition}[Topological Boundary]
+Let $A\subset \mathbb{R}^n$ be a set. The topological boundary of A, denoted $\partial A$, is the set of the boundary points of A.
+\end{definition}
+\begin{lemma}
+Let $A$ and $B$ be sets of $\mathbb{R}^n$. Then:
+    \begin{enumerate}[label=(\alph*), nosep]
+        \item $\partial(A\cup B)\subseteq \partial A\cup\partial B$
+        \item $\partial(A\cap B)\subseteq\partial A\cap\partial B$
+        \item $\partial(A\times B)=(\partial A\times B)\cup(A\times\partial B)\cup(\partial A\times \partial B)
+    \end{enumerate}
+\end{lemma}
+\begin{definition}[Limit Point]
+Let $A\subseteq\mathbb{R}^n$ be a set. A point $p\in\mathbb{R}^n$ is a limit point of A if for every $\varepsilon > 0$, the set $B_\varepsilon(p) \setminus \{p\}$ contains points in A.
+\end{definition}
+\begin{definition}[Closure]
+Let $A\subseteq\mathbb{R}^n$ be a set. The closure of A, denoted $\overline A$ or $cl(A)$, is the union of the set A and the set of the limit points of A.
+\end{definition}
+\begin{theorem}
+For any set $A\subseteq\mathbb{R}^n$, all of the followings hold:
+\begin{enumerate}[label=(\alph*), nosep]
+\item $A^o \subseteq A\subseteq \overline A$
+\item $A^o\cap \partial A=\emptyset$
+\item $\overline A=A^o\cup \partial A$
+\item $\partial A=\overline A \setminus A^o$
+\end{enumerate}
+\end{theorem}
+
+\subsection{Sequences}
+\begin{definition}[Sequence]
+A sequence in $\mathbb{R}^n$ is a function with domain $\{k\in\mathbb{Z}:k\geq k_0\}$ for some fixed $k_0\in\mathbb{Z}$ and codomain $\mathbb{R}^n$.
+\end{definition}
+\begin{definition}[Subsequence]
+A subsequence 
+\end{definition}
+\subsection{Open and Closed Sets}
+\subsection{Compact Sets}
+\subsection{Limit and Continuity}
+\subsection{Connected and Path-Connected Sets}
+
+\section{Differentiation}
+\subsection{Derivatives}
+\begin{definition}[$j^{th}$ Partial Derivative]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. Let $\{e_1,\cdots,e_n\}$ be the standard basis vectors for $\mathbb{R}^n$. Then, the $j^{th}$ partial derivative of $f$ at $a$ is given by:
+\[
+\partial_jf(a)=\lim_{h\to 0}\frac{f(a+he_j)-f(a)}{h}
+\]
+\end{definition}
+
+\begin{definition}[Directional Derivative]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. Let $u\in\mathbb{R}^n$ be a vector, then the directional derivative at a is given by:
+\[
+D_uf(a)=\lim_{h\to 0}\frac{f(a+hu)-f(a)}{h}
+\]
+\end{definition}
+
+\subsection{Gradients, Differentials and Jacobians}
+\begin{definition}[Gradient]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}$. Let $a$ be an interior point of $A$, then the gradient of $f$ at $a$ is given by:
+\[
+\nabla f(a)=(\partial_1f(a),\cdots,\partial_nf(a))
+\]
+\end{definition}
+
+\begin{definition}[Differential]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. We say $f$ is differentiable at $a$ if there exists a linear map $M:\mathbb{R}^n\to\mathbb{R}^m$ such that:
+\[
+\lim_{h\to 0}\frac{f(a+h)-f(a)-Mh}{\|h\|}=0,
+\]
+and the linear map $M$ is called the differential of $f$ at $a$, denoted by $df_a$.
+\end{definition}
+
+\begin{theorem}
+Let $A\subseteq\mathbb{R}^n$ and let $f:A\to\mathbb{R}^m$ be a function. Let $a$ be an interior point of $A$. If $f$ is differentiable at $a$, then for all $u\in\mathbb{R}^n$, the directional derivative $D_uf(a)$ exists, and:
+\[
+df_a(u)=D_uf(a)
+\]
+\end{theorem}
+
+\begin{definition}[Jacobian]
+Let $A\subset\mathbb{R}^n$ and let $f:A\to\mathbb{R}^m$ be a function. Let $a$ be an interior point of $A$. Let $f=(f_1,\cdots,f_m)$. The Jacobian of $f$ at $a$ is defined by:
+\[
+Df(a)=[\partial_if_i(a)]_{ij}=\begin{pmatrix}\partial_1f_1(a)&\cdots&\partial_nf_1(a)\\\vdots&\ddots&\vdots\\\partial_1f_m(a)&\cdots&\partial_nf_m(a)\end{pmatrix}=\begin{pmatrix}\nabla f_1(a)\\\vdots\\\nabla f_m(a)\end{pmatrix}
+\]
+\end{definition}
+
+\begin{theorem}
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$ be a function. Let $a$ be an interior point of $A$. Let $u\in\mathbb{R}^n$, then:
+\[
+Df_a(u)=Df(a)\cdot u
+\]
+\end{theorem}
+
+\begin{definition}[$C^1$]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. Then, $f$ is continuously differentiable at $a$ (or $C^1$ at $a$) if $\partial_1f,\cdots,\partial_nf$ are all defined in a neighborhood of $a$ and are all continuous at a.
+\end{definition}
+\subsection{The Chain Rule}
+\begin{theorem}[The Chain Rule]
+Let $A\subseteq\mathbb{R}^n$ and $B\subseteq\mathbb{R}^m$. Let $a$ be an interior point of $A$. If $f:A\to B$ and $g:B\to\mathbb{R}^k$ are differentiable at $a$ and $f(a)$ respectively, then $h=g\circ f$ is differentiable at $a$, and:
+\[
+dh_a=dg_{f(a)}\circ df_a,
+\]
+and the Jacobians satisfy:
+\[
+Dh(a)=Dg(f(a))\cdot Df(a)
+\]
+\end{theorem}
+
+\begin{corollary}
+Let $U\subseteq\mathbb{R}^n$ and $V\subseteq\mathbb{R}^m$ be open sets. If the function $f:U\to V$ and $g:V\to \mathbb{R}^k$ are both $C^1$, then the function $g\circ f:U\to\mathbb{R}^k$ is $C^1$.
+\end{corollary}
+
+\subsection{Mean Value Theorem}
+\begin{theorem}[Mean Value Theorem]
+Let $U\subseteq\mathbb{R}^n$ be open and let $a,b\in U$. Let $f$ be a differentiable real-valued function on $U$. If $U$ contains the line segment $L$ from $a$ to $b$, then there exists $c\in L$ such that:
+\[
+\nabla f(c)\cdot(b-a)=f(b)-f(a)
+\]
+\end{theorem}
+\subsection{Optimization}
+\begin{theorem}[Local Extreme Value Theorem]
+Let $A\subseteq\mathbb{R}^n$ and let $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. If $f$ has a local extrema at $a$, then either $\nabla f(a)=0$ or $\nabla f(a)$ does not exist.
+\end{theorem}
+
+\begin{definition}[Critical Point]
+Let $A\subseteq\mathbb{R}^n$ and let $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$, then $a$ is a critical point of $f$ if either $\nabla f(a)=0$ or $\nabla f(a)$ does not exist.
+\end{definition}
+
+\begin{definition}[Saddle Point]
+Let $A\subseteq\mathbb{R}^n$ and let $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$, then $a$ is a saddle point of $f$ if  $\nabla f(a)=0$ and $f$ does not have an extrema at $a$.
+\end{definition}
+
+\begin{theorem}[Lagrange Multiplier Theorem]
+Let $U$ be an open subset of $\mathbb{R}^n$. Let $g:U\to\mathbb{R}$ and $f:U\to\mathbb{R}$ be $C^1$ real-valued functions. Fix $c\in\mathbb{R}$, defined:
+\[
+S=\{x\in U: g(x)=c\}.
+\]
+Assume $\nabla g(p)\ne 0$ for any $p\in S$. If $f$ has a local extrema on $S$ at the point $a$, then there exists $\lambda\in\mathbb{R}$ such that:
+\[
+\nabla f(a)=\lambda\nabla g(a)
+\]
+The quantity $\lambda$ is called the Lagrange multiplier.
+\end{theorem}
+
+\section{Manifolds in $\mathbb{R}^n$}
+\subsection{Tangent Space}
+\begin{definition}[Tangent Vector]
+Let $S\subseteq\mathbb{R}^n$ be a set and let $p$ be a point in $S$. A vector $v\in\mathbb{R}^n$ is the tangent vector of $S$ at $p$ if there exists an open interval $I\subseteq\mathbb{R}$ containing 0 and a map $\gamma:I\to\mathbb{R}^n$ such that $\gamma$ is $C^1$, $\gamma(I)\subseteq S$, $\gamma(0)=p$ and $\gamma'(0)=v$.
+\end{definition}
+
+\begin{definition}[Tangent Space]
+Let $S\subseteq\mathbb{R}^n$ be a set and let $p$ be a point in $S$. The tangent space of $S$ at $p$, denoted $T_pS$, is the set of tangent vectors of $S$ at $p$.
+\end{definition}
+
+\begin{definition}[Tangent Plane]
+Let $S\subseteq\mathbb{R}^n$ be a set and let $p\in S$. The tangent plane of $S$ at $p$, denoted $p+T_pS$, is the tangent space translated to $p$.
+\end{definition}
+
+\subsection{Diffeomorphisms}
+\begin{definition}[Global Inverse]
+Let U and V be subsets of $\mathbb{R}^n$. The global inverse of $F: U\rightarrow V$ is the map $g: V\rightarrow U$ satisfying $G\circ F(x)=x$ for all $x\in U$ and $F\circ G(y)=y$ for all $y\in V$, i.e.
+\[
+\forall x\in U, \forall y\in V, y=F(x)\Longleftrightarrow x=G(y). 
+\]
+The inverse of F is unique and denoted $F^{-1}$.
+\end{definition}
+
+\begin{definition}[Global Diffeomorphism]
+Let $U$ and $V$ be open subset of $\mathbb{R}^n$. A function $F:U\rightarrow V$ is a global diffeomorphism if $F$ is bijective, $C^1$ and its inverse function $F^{-1}:V\rightarrow U$ is $C^1.$
+\end{definition}
+
+\begin{definition}[Local Diffeomorphism]
+Let $A$ and $B$ be open subsets of $\mathbb{R}^n.$ Fix a point $a\in A.$ A function $F:A\rightarrow B$ is a local diffeomorphism at $a$ if there exists an open subset $U\subseteq A$ containing $a$, such that $F(U)$ is open, and the restriction $F|_U: U\rightarrow F(U)$ is a global diffeomorphism. The function $G=F|_U^{-1}: F(U)\rightarrow U$ is a local inverse of $F$ at $a.$
+\end{definition}
+
+
+\begin{lemma}
+Let $A$ and $B$ be open subsets of $\mathbb{R}^n.$ If $F:A\rightarrow B$ is a global diffeomorphism, then $F$ is a local diffeomorphism at every point $a\in A.$
+\end{lemma}
+
+\subsection{The Inverse and Implicit Function Theorems}
+\begin{theorem}[Inverse Function Theorem, pt.1]
+Let $U$ and $V$ be open subsets of $\mathbb{R}^n.$ Let the function $F:U\rightarrow V$ be a diffeomorphism. Then for every $x\in U$, the Jacobian $DF(x)$ is an invertible $n\times n$ matrix and the Jacobian of the inverse function $G=F^{-1}$ satisfies:
+\[
+DG(y)=D^{-1}F(x) \text{ }\forall x\in U \text{ and }y=F(x)
+\]
+\end{theorem}
+
+\begin{theorem}[Inverse Function Theorem, pt.2]
+Let $A$ and $B$ be open subsets of $\mathbb{R}^n.$ Fix $a\in A$. Let $F:A\rightarrow B$ be a $C^1$ function. If the Jacobian $DF(a)$ is  invertible, then $F$ is a local diffeomorphism at $a.$
+\end{theorem}
+
+\begin{theorem}[Implicit Function Theorem]
+Let $U\subseteq \mathbb{R}^n\times\mathbb{R}$ be open and let $f$ be a real-valued $C^1$ function on $U$. Let $a\in\mathbb{R}^n, b\in{R}$ and $(a,b)\in U.$ If $f(a,b)=0$ and $\displaystyle\frac{\partial f}{\partial y}(a,b)\neq 0$, then the equation $f(x,y)=0$ defines $y$ locally as a $C^1$ function $\phi$ of $x$ near $(a,b).$
+\end{theorem}
+
+\begin{theorem}[Implicit Function Theorem for Several Variables]
+Let $U\subseteq \mathbb{R}^n\times\mathbb{R}^k$ be open. Let $F:U\rightarrow \mathbb{R}^k$ be a $C^1$ map. Let $a\in\mathbb{R}^n, b\in\mathbb{R}^k$ so $(a,b)\in U.$ If $F(a,b)=0$ and the $k\times k$ matrix:
+\[
+\frac{\partial F}{\partial y}(a,b)=\frac{\partial (F_1,...,F_k)}{\partial (y_1,...,y_k)}(a,b)=\left[\frac{\partial F_i}{\partial y_j}(a,b)\right]_{ij}
+\]
+is invertible, then the equation $F(x,y)=0$ locally defines $y=(y_1,...,y_k)$ as a $\mathbb{R}^k$-valued $C^1$ function $x=(x_1,...,x_n)$ near $(a,b).$
+\end{theorem}
+
+\subsection{Smooth Manifolds and Implicit Forms}
+\begin{definition}[k-Dimensional Smooth Manifold]
+Fix $k,n\in \mathbb{N}^+$ with $k<n.$ Let $S\subseteq\mathbb{R}^n$ be a set and let point $p\in S.$ The set $S$ is a k-dimensional smooth manifold at $p$ if:
+\begin{enumerate}[label=(\arabic*)]
+\item There exists an open set $U\subseteq \mathbb{R}^n$ such that $p\in U$.
+\item $S\cap U$ is the graph of a $C^1$ function $f:V\rightarrow \mathbb{R}^{n-k}$, where $V\subseteq\mathbb{R}^k$ is open.
+\end{enumerate}  Moreover, $S$ is a k-dimensional smooth manifold if $S$ is a k-dimensional smooth manifold at every point $p\in U.$
+\end{definition}
+
+\begin{theorem}
+Let $S$ and $S'$ be subsets of $\mathbb{R}^n$ with $p\in S\cap S'.$ If there exists an open set $U\subseteq \mathbb{R}^n$ containing $p$ such that $S\cap U=S'\cap U$, then $T_pS=T_pS'.$ 
+\end{theorem}
+
+\begin{theorem}
+Let $U\subseteq \mathbb{R}^n$ be an open set.Let $f:U\rightarrow \mathbb{R}$ be a $C^1$ function. Assume the set:
+
+\hfil $S=\{x\in U: f(x)=0\}=f^{-1}(0)$, \hfil
+
+is non-empty. Fix $p\in S,$ if $\nabla f(p)\neq0$, then $S$ is a $(n-1)$-dimensional smooth manifold at $p$ iff $\nabla f(p)\cdot v=0.$ That is,
+
+\hfil $T_pS=\{v\in\mathbb{R}^n: \nabla f(p)\cdot v=0\},$\hfil
+
+therefore, the tangent plane of $S$ of $p$ is given by:
+\[
+p+T_pS=\{x\in\mathbb{R}^n: \nabla f(p)\cdot (x-p)=0\}.
+\]
+\end{theorem}
+
+\begin{definition}[Implicit Form]
+Let $m,n\in\mathbb{N}^+$ with $n>m$. A set $S\subseteq\mathbb{R}^n$ can be written in implicit form if there exists a constant $c\in\mathbb{R}^m$, a set $A\subseteq\mathbb{R}^n$, and a continuous function $f:A\to\mathbb{R}^m$ such that:
+\[
+S=f^{-1}(\{c\})=\{x\in\mathbb{R}^n: f(x)=c\}
+\]
+\end{definition}
+
+
+\section{Approximation}
+\subsection {Second and Higher Order Partial Derivatives}
+\begin{definition}[Second Order Partial Derivative]
+Let $U\subseteq \mathbb{R}^n$ be open. Let $f: U\rightarrow \mathbb{R}^m$ be $C^1$. Fix $i,j\in\{1,...,n\}$, then the second order partial derivative $\partial i\partial jf$ at a is defined by:
+\[
+\partial i\partial jf(a)=\partial i(\partial jf)(a)
+\]
+Provided that the $i^{th}$ partial of $\partial j f$ exists at a.
+\end{definition}
+
+\begin{definition}[Twice Continuously Differentiable]
+Let $U\subseteq \mathbb{R}^n$ be an open set. Let $f: U\rightarrow \mathbb{R}^m$ be a function, then $f$ is twice continuously differentiable or $C^2$ if $\partial i \partial j f$ exists and is continuous everwhere in U.
+\end{definition}
+
+\begin{theorem}[Clairaut's Theorem]
+Let $U\subseteq \mathbb{R}^n$ and $f: U\rightarrow \mathbb{R}^m$ be $C^2$. Then $\partial i\partial j f=\partial j\partial i f\text{ }$for all $i,j\in\{1,...,n\}.$
+\end{theorem}
+
+\begin{definition}[Hessian Matrix]
+Let f be a real valued function which is $C^2$ at $a\in\mathbb{R}^n$. The Hessian of f at a is the $n\times n$ matrix $Hf(a)=[\partial i\partial jf(a)]_{ij}.$
+\end{definition}
+
+\begin{definition}[k-Times Continuously Differentiable]
+Let $k\in\mathbb{N}^+$. Let $U\subseteq \mathbb{R}^n$ be an open set. Let $f: U\rightarrow\mathbb{R}^m$ be k-times continuously differentiable or $C^k$, then for all $i_1,i_2,...,i_k\in\{1,...,n\}$, its $k^{th}$ order partial derivatives $\partial_{i_1} \partial_{i_2}...\partial{i_k} f$ exist and continuous everywhere in $U$.
+\end{definition}
+
+\begin{lemma}
+Every polynomial is $C^\infty.$
+\end{lemma}
+
+\begin{theorem}[Generalized Clairaut's Theorem]
+Let $U\subseteq \mathbb{R}^n$ be open. Let $f: U\rightarrow \mathbb{R}^m$ be $C^k$, then the mixed partial derivatives of f up to order k commute. That is, for any integer $1\leq i_1, i_2,...,i_k\leq n$ and any reordering $j_1,j_2,...,j_k$ of $i_1,i_2,...,i_k$, there is:
+\[
+\partial i_1\partial i_2...\partial i_kf=\partial j_1\partial j_2...\partial j_kf.
+\]
+\end{theorem}
+
+\begin{definition}[Multi-Index]
+An element $\alpha=(\alpha_1,...,\alpha_n)\in\mathbb{N}^n$ is a multi-index. The degree of $\alpha$ is a non-negative integer $|\alpha|=\alpha_1+...+\alpha_n$. The factorial $\alpha!=\alpha_1!\cdot...\cdot\alpha_n!.$
+\end{definition}
+
+\begin{definition}[$\alpha$-Partial Derivative]
+Let $U\subseteq\mathbb{R}^n$ be an open set. Let $f:U\rightarrow\mathbb{R}^m$ be $C^k$. For any multi-index $\alpha=(\alpha_1,...,\alpha_n)\in\mathbb{N}^n$ with degree $|\alpha|\leq k$, define the $\alpha$-partial derivative by $\partial^{\alpha}f=\partial_1^{\alpha_1}f\cdot...\cdot\partial_n^{\alpha_n}f.$
+\end{definition}
+
+\begin{definition}[Monomial]
+Let $\alpha=(\alpha_1,...,\alpha_n)\in\mathbb{N}^+$ be a multi-index, and let $x=(x_1,...,x_n)\in\mathbb{R}^n$. The monomial $x^\alpha$ in the variables $x_1,...,x_n$ is defined by $x^\alpha=x_1^\alpha\cdot...\cdot x_n^\alpha$, where $x^\alpha$ has degree $|\alpha|=\alpha_1+...+\alpha_n$ in the variables $x_1,...,x_n$.
+\end{definition}
+
+\begin{definition}[Polynomial]
+A polynomial is a finite linear combination of monomials. The degree of a polynomial is the maximum degree of its monomials.
+\end{definition}
+
+\subsection{Taylor Polynomials}
+\begin{definition}[$k^{th}$-Taylor Polynomial]
+Let $f$ be a function of class $C^k$ on an open ball centered at $a\in \mathbb{R}^n.$ The $k^{th}$ Taylor Polynomial of $f$ at $a$ is:
+\[
+P_k(x)=\sum_{\substack{a\in\mathbb N^n\\|a|\le k}}\frac{\partial^k f(a)}{k!}(x-a)^k
+\]
+\end{definition}
+
+\begin{definition}[$k^{th}$ Order Approximation]
+Let $f$ and $g$ be real-valued functions defined on an open ball centered at $a\in \mathbb{R}^n.$ The function $g$ is an $k^{th}$ order approximation of $f$ at $a\in\mathbb{R}^n$ if:
+\[
+\lim_{x\to a}\frac{f(x)-g(x)}{\|x-a\|^k}=0
+\]
+\end{definition}
+
+\begin{theorem}[Taylor's Theorem]
+Let $f$ be a real-valued function of class $C^k$ on an open ball at $a\in \mathbb{R}^n.$ A polynomial $P$ is the $k^{th}$ Taylor Polynomial of $f$ at $a$ if and only if $P$ is the unique degree $\leq k$ polynomial which is the $k^{th}$ order approximation of $f$ at $a.$
+\end{theorem}
+
+
+\subsection{Critical Points}
+\begin{definition}[Quadratic Form]
+Let $A$ be a real $n\times n$ symmetric matrix. The quadratic form associated to $A$ is the function $q:\mathbb{R}^n\to\mathbb{R}$ given by $q(n)=v^TAv$ for $v\in\mathbb{R}^n.$ 
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a real $n\times n$ symmetric matrix. Let $q:\mathbb{R}^n\to\mathbb{R}$ be its associated quadratic form. If $v\in\mathbb{R}^n$ is an eigenvector of A with eigenvalue $\lambda\in \mathbb{R}$, then $q(v)=\lambda\|v\|^2$
+\end{lemma}
+
+\begin{theorem}[Spectral Theorem]
+Every $n\times n$ real symmetric matrix has an orthonormal basis of eigenvectors with real eigenvalues.
+\end{theorem}
+
+\begin{theorem}
+Let $A$ be a $n\times n$ real symmetric matrix.Let $q:\mathbb{R}^n\to\mathbb{R}$ be its corresponding quadratic form, where $q(v)=v^TAv$ for $v\in\mathbb{R}^n.$ Then, the maximum and minimum values of $q$ on the unit sphere $S^{n-1}$ are respectively equal to the maximum and minimum eigenvalues of $A.$
+\end{theorem}
+
+\begin{theorem}[Second Derivative Test]
+Let $f$ be a real-value function of class $C^2$ on an open ball at $a\in\mathbb{R}^n.$ If $a$ is a critical point of $f$, the $f$ has:
+\begin{enumerate}[label=(\alph*), nosep]
+\item a local minimum if all the eigenvalues of the Hessian $Hf(a)$ are positive.
+\item a local maximum if all the eigenvalues of the Hessian $Hf(a)$ are negative.
+\item a saddle point if the Hessian $Hf(a)$ has positive and negative eigenvalues.
+\end{enumerate}
+\end{theorem}
+\section{Integrals}
+\subsection{Partitions}
+\begin{definition}
+A rectangle in $\mathbb{R}$ is a closed interval $[a,b]$, where $a,b\in\mathbb{R}$ and $a<b.$ The length of $[a,b]$ is defined to be $b-a.$ 
+\end{definition}
+
+\begin{definition}[Partition]
+A partition $P$ of the interval $[a,b]$ is a finite set such that $\{a,b\}\subseteq P\subseteq [a,b].$
+\end{definition}
+
+\begin{definition}
+Write $P=\{x_0,...,x_k\}$, where $a=x_0<...<x_k=b$. Then:
+\begin{enumerate}[label=(\alph*), nosep]
+\item The index set of $P$ is the set $\{1,...,k\}.$
+\item For $i\in\{1,...,k\}$, the $i$-subrectangle of $P$ is given by $R_i=[x_{i-1},x_i].$
+\item The subrectangles of $P$ is the set of rectangles $\{R_1,...,R_k\}.$
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+A rectangle in $\mathbb{R}^2$ is a closed interval $R=[a,b]\times [c,d]$, where $a,b,c,d\in\mathbb{R}$ and $a<b,c<d.$ The area of $R$ is defined to be $(b-a)(d-c).$ 
+\end{definition}
+
+\begin{definition}
+A rectangle in $\mathbb{R}^n$ is a closed interval $R=[a_1,b_1]\times...\times [a_n,b_n]$, where $a1_,...,a_n,b_1,...,b_n\in\mathbb{R}$ and $a_i<b_i\forall1\leq i\leq n.$ The volume of $R$ is defined to be $(b_1-a_1)\cdot...\cdot(b_n-a_n).$ 
+\end{definition}
+
+\begin{theorem}
+Let $R$ be a rectangle in $\mathbb{R}^n.$ Let $P$ be a partition of $R.$ Let $I$ be the index set of $P$ and let $\{R_i:i\in I\}$ be the subrectangles of $P.$ Then:
+\begin{enumerate}[label=(\alph*), nosep]
+\item $R$=$\displaystyle\bigcup_{i\in I}R_i$
+\item $\forall i,j\in I,i\neq j\Rightarrow \operatorname{int}(R_i\cap R_j)=\emptyset$
+\item $\displaystyle \operatorname{vol}(R)=\sum_{i\in I}\operatorname{vol}(R_i)$
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}[Refinement]
+Let $P=(P_1,\cdots,P_n)$ and $P'=(P_1',\cdots,P_n')$ be partitions of a rectangle $R$. The partition $P'$ is a refinement of $P$ if $P_j\subseteq P_j'$ for every $j\in\{1,\cdots,n\}$.
+\end{definition}
+
+\subsection{Jordan Measure}
+\begin{definition}[Indicator Function]
+Let $S\subseteq \mathbb{R}^n$. The indicator function of $S$ is the function $\chi_S:\mathbb{R}^n\to\mathbb{R}$ defined by:
+
+\hfil$\chi_S(x)=\begin{cases}1,x\in S\\0, x\notin S\end{cases}$\hfil
+
+\end{definition}
+
+\begin{definition}[Jordan Measure]
+A set $S\subseteq \mathbb{R}^n$ is Jordan measurable if there exists a rectangle $R\subseteq\mathbb{R}^n$ and $\chi_S$ is integrable on $R.$ In this case, the Jordan measure of $S$ is:
+
+\hfil$\displaystyle \operatorname{vol}(S)=\int_R\chi_S dV$\hfil
+
+\end{definition}
+
+\begin{theorem}
+Let $S\subseteq\mathbb{R}^n$ and let $R, R'\subseteq\mathbb{R}^n$ be rectangles containing $S.$ Then $\chi_S$ is integrable on $R$ if and only if $\chi_S$ is integrable on $R'.$\\ In this case:
+
+\hfil$\displaystyle \int_R \chi_SdV=\int_{R'}\chi_SdV$\hfil
+
+\end{theorem}
+
+\begin{theorem}
+A set $S\subseteq\mathbb{R}^n$ is Jordan Measurable if and only if $S$ is bounded, $\partial S$ is Jordan measurable and $\operatorname{vol}(\partial S)=0.$
+\end{theorem}
+
+\begin{theorem}
+Let $S,T,S_1,...,S_k\subseteq\mathbb{R}^n$ be Jordan measurable sets. Then:
+\begin{enumerate}[label=(\alph*)]
+\item If $S\subseteq T$, then $\operatorname{vol}(S)\leq \operatorname{vol}(T).$
+\item The sets $S\cap T$ and $S\cup T$ are Jordan measurable, and:
+
+\hfil$\operatorname{vol}(S\cup T)=\operatorname{vol}(S)+\operatorname{vol}(T)-\operatorname{vol}(S\cap T).$\hfil
+
+\item The union $S_1\cup\cdots\cup S_k$ is Jordan measurable, and: 
+
+\hfil$\operatorname{vol}(S_1\cup\cdots\cup S_k)\leq\operatorname{vol}(S_1)+\operatorname{vol}(S_2)+\cdots+\operatorname{vol}(S_k).$\hfil
+
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+Let $S\subseteq\mathbb{R}^n$ be Jordan measurable. Then $\bar{S}, S^o$ and $\partial S$ are Jordan measurable and $\operatorname{vol}(S)=\operatorname{vol}({\bar{S}})=\operatorname{vol}(S^o)$, and $\operatorname{vol}(\partial S)=0$.
+\end{theorem}
+
+\begin{definition}[Jordan Measure Zero]
+A set $S\subseteq\mathbb{R}^n$ is Jordan measure zero if $\operatorname{vol}(S)=0.$
+\end{definition}
+
+\begin{theorem}
+A set $S\subseteq\mathbb{R}^n$ is Jordan measure zero if and only if for every $\varepsilon>0$, there exists rectangles $R_1,\cdots ,R_N\subseteq\mathbb{R}^n$ such that:
+
+\hfil$\displaystyle S\subseteq\bigcup_{i=1}^N R_i, \text{ }\sum_{i=1}^N\operatorname{vol}(R_i)<\varepsilon$\hfil
+
+\end{theorem}
+
+\begin{theorem}
+Any finite subset $S\subseteq\mathbb{R}^n$ is Jordan measure zero.
+\end{theorem}
+
+\begin{lemma}
+Let $S\subseteq\mathbb{R}^n.$ If $S^0\neq\emptyset$, then $S$ does not have Jordan measure zero.
+\end{lemma}
+
+\begin{lemma}
+Let $S,S_1,\cdots,S_k\subseteq\mathbb{R}^n$ be Jordan measure zero sets. Then:
+\begin{enumerate}[label=(\alph*)]
+\item Every subset of $S$ has Jordan measure zero.
+\item The union $S_1\cup\cdots\cup S_k$ has Jordan measure zero.
+\item The closure $\bar{S}$ has Jordan measure zero.
+\end{enumerate}
+\end{lemma}
+
+\begin{theorem}[Sard's Theorem]
+Let $k,n\in \mathbb{R}^+$ with $k<n.$ Let $R\subseteq\mathbb{R}^k$ be a rectangle and let $f:R\to\mathbb{R}^n$ be $C^1$ on an open set containing $R.$ Then the image $f(R)=\{f(x): x\in R\}$ is Jordan measurable with $\operatorname{vol}(f(R))=0.$
+\end{theorem}
+
+\section{Integration Methods}
+\subsection{Fubini's Theorem}
+\begin{lemma}
+Let $f:[a,b]\to\mathbb{R}$ be a bounded real-valued function on the interval $[a,b]$. If $f$ is integrable on $[a,b]$, then:
+\[
+\displaystyle\int_{[a,b]}f\mathrm{d}V=\int_a^bf(x)\mathrm{d}x.
+\]
+\end{lemma}
+\begin{definition}[Slices]
+Let $f:[a,b]\times[c,d]\to\mathbb{R}$ be a function. A $x$-slice of $f$ at $x=x_0$ is a function:
+\[
+g:[c,d]\to\mathbb{R}\text{ s.t. }g(y)=f(x_0,y)
+\]
+for some fixed $x_0\in[a,b]$. Similarly, a $y$-slice of $f$ at $y=y_0$ is a function:
+\[
+h:[a,b]\to\mathbb{R}\text{ s.t. } h(x)=f(x,y_0)
+\]
+for some fixed $y_0\in[c,d]$.
+\end{theorem}
+\begin{lemma}
+Let $f:[a,b]\times[c,d]\to\mathbb{R}$ be a function. If $f$ is bounded or continuous, then every slice of $f$ is bounded or continuous.
+\end{lemma}
+\begin{theorem}[Fubini's Theorem]
+Let $f:[a,b]\times[c,d]\to\mathbb{R}$ be bounded. 
+\begin{enumerate}[label=(\alph*)]
+\item For $x\in[a,b]$, define $f^x:[c,d]\to\mathbb{R}$ by $f^x(y)=(x,y)$. Assume $f^x$ is integrable on $[c,d]$ for every $x\in[a,b$] and $f$ is integrable on $[a,b]\times[c,d]$. Then $\displaystyle \int_c^df(x,y)\mathrm{d}y$ and $\displaystyle\int_a^b\left(\int_c^df(x,y)\mathrm{d}y\right)\mathrm{d}x$ exists for every $x\in[a,b]$, and:
+\[
+\iint_Rf\mathrm{d}A=\int_a^b\left(\int_c^df(x,y)\mathrm{d}y\right)\mathrm{d}x.
+\]
+\item If $f$ is continuous, then $\displaystyle\int_a^b\left(\int_c^df(x,y)\mathrm{d}y\right)\mathrm{d}x$ and $\displaystyle\int_c^d\left(\int_a^bf(x,y)\mathrm{d}x\right)\mathrm{d}y$ both exist, and:
+\[
+\iint_{[a,b]\times[c,d]}f\mathrm{d}A=\displaystyle\int_a^b\left(\int_c^df(x,y)\mathrm{d}y\right)\mathrm{d}x=\displaystyle\int_c^d\left(\int_a^bf(x,y)\mathrm{d}x\right)\mathrm{d}y.
+\]
+\end{enumerate}
+ \end{theorem}
+\begin{theorem}
+Let $\Omega\subseteq\mathbb{R}^2$ be a Jordan measurable set such that the restricted polar coordinate transformation $g|_{\Omega}:\Omega\to g(\Omega)$ is a bijection. If $f:g(\Omega)\to\mathbb{R}$ is integrable on $g(\Omega)$, then $F:\Omega\to\mathbb{R}$ given by $F(r,\theta)=(f\circ g)(r,\theta)\cdot|r|$ is integrable on $\Omega$, and:
+\[
+\iint_{g(\Omega)}f\mathrm{d}A=\iint_{\Omega}F\mathrm{d}A.
+\]
+\end{theorem}
+
+\begin{theorem}[Fubini's Theorem in 3D]
+Let $R=[a,b]\times[c,d]\times[e,f]$ and let $\varphi:R\to\mathbb{R}$ be bounded. If the $x$-slice of $\varphi$ is integrable on $[c,d]\times[e,f]$, the $xy$-slice of $\varphi$ is integrable on $[e,f]$, and $\varphi$ is integrable on $R$, then every iterated triple integral exists and is equal to $\displaystyle\iiint_R\varphi dV$.
+\end{theorem}
+
+\begin{theorem}[$n$-Dimensional Fubini's Theorem]
+Let $R=[a_1,b_1]\times\cdots\times[a_n,b_n]$ be a rectangle in $\mathbb{R}^n$. Let $f:R\to\mathbb{R}$ be a bounded real-value function. If $f$ is integrable on $R$ and every slice of $f$ on $R$ is integrable on its domain, then every iterated $n$-fold integral exists and are all equal to $\displaystyle\int_RfdV$.
+\end{theorem}
+
+
+\subsection{Change of Variables}
+\begin{theorem}
+Let $T:\mathbb{R}^n\to\mathbb{R}^n$ be a linear map. For every rectangle $R$ in $\mathbb{R}^n$:
+\[
+\operatorname{vol}(T(R))=|\det(T)|\operatorname{vol}(R)
+\]
+\end{theorem}
+
+\begin{theorem}[Change of Variable Theorem]
+Let $U,V\subseteq\mathbb{R}^n$ be open sets. Let $g:U\to V$ be a diffeomorphism. Let $\Omega\subseteq U$ be a Jordan measurable set. Assume $|\det(Dg)|$ is bounded on $\Omega$. The function $f$ is integrable on $g(\Omega)$ iff $(f\circ g)|\det(Dg)|$ is integrable on $\Omega$. If so:
+\[
+\int_{g(\Omega)}fdV=\int_{\Omega}(f\circ g)|\det(Dg)|dV
+\]
+\end{theorem}
+
+\section{Integration on Curves}
+\subsection{Curves and Line Integrals}
+\begin{definition}[Smooth Curve]
+A curve $\gamma:[a,b]\to\mathbb{R}^n$ is smooth if $\gamma$ is $C^1$ on $[a,b]$ and $\gamma'$ is bounded on $[a,b]$.
+\end{definition}
+
+\begin{definition}[Regular Curve]
+A curve $\gamma:[a,b]\to\mathbb{R}^n$ is regular if $\gamma$ is differentiable on $(a,b)$ and $\gamma'(t)\neq 0$ for all $t\in[a,b]$.
+\end{definition}
+
+\begin{definition}[Simple Curve]
+A curve $\gamma:[a,b]\to\mathbb{R}^n$ is simple if for all $s,t\in (a,b)$, $s\ne t\Rightarrow \gamma(s)\ne\gamma(t)$.
+\end{definition}
+
+\begin{definition}[Closed Curve]
+A curve $\gamma:[a,b]\to\mathbb{R}^n$ is closed if $\gamma(a)=\gamma(b)$.
+\end{definition}
+
+\begin{theorem}
+If $\gamma:[a,b]\to\mathbb{R}^n$ is a smooth, regular and simple parametrization of a set $C\subseteq\mathbb{R}^n$, then the set $C$ is a 1-dimensional smooth manifold at $p=\gamma(c)$ for every $c\in(a,b)$. Moreover, the tangent space satisfies $T_pC=\text{span}\{\gamma'(c)\}$.
+\end{theorem}
+
+\begin{definition}[Arc Length]
+The arc length of a curve $C\subseteq\mathbb{R}^n$ is defined as:
+\[
+l(C)=\int_a^b\|\gamma'(t)\|dt,
+\]
+where $C$ is parametrized by $\gamma:[a.b]\to\mathbb{R}^n$.
+\end{definition}
+
+\begin{definition}[Line Integral]
+Let $C$ be a curve in $\mathbb{R}^n$ parametrized by $\gamma:[a,b]\to\mathbb{R}^n$. Let $f$ be a bounded real-valued function defined on $C$. The line integral of $f$ over $C$ is defined by:
+\[
+\int_Cfds=\int_a^bf(\gamma(t))\|\gamma'(t)\|dt
+\]
+If the line integral of $f$ over $C$ exists, then $f$ is integrable on $C$.
+\end{definition}
+
+\subsection{Circulation, Curl, Flux and Divergence}
+\begin{definition}[Vector Field]
+A $n$-dimensional vector field is a function $F:\mathbb{R}^n\to\mathbb{R}^n$.
+\end{definition}
+
+\begin{definition}[Divergence in $\mathbb{R}^2$]
+Let $F=(F_1,F_2)$ be a $C^1$ vector field in $\mathbb{R}^2$ and let $p=(x,y)$ be a point in $\mathbb{R}^2$, then the divergence of $F$ at $p$ equals to:
+\[
+(\nabla\cdot F)(p)=\frac{\partial F_1}{\partial x}+\frac{\partial F_2}{\partial y}
+\]
+\end{definition}
+
+\begin{definition}[Curl in $\mathbb{R}^2$]
+Let $F=(F_1,F_2)$ be a $C^1$ vector field in $\mathbb{R}^2$, and let $p=(x,y)$ be a point in $\mathbb{R}^2$, then the curl of $F$ at $p$ is:
+\[
+(\nabla \times F)(p)=\begin{vmatrix}\partial_x&\partial_y\\F_1&F_2\end{vmatrix}=\frac{\partial F_2}{\partial x}-\frac{\partial F_1}{\partial y}
+\]
+\end{definition}
+
+\begin{definition}[Flux in $\mathbb{R}^2$]
+Let $F$ be a $C^1$ vector field in $\mathbb{R}^2$ defined on an orientated closed curve $C$ in $\mathbb{R}^2$. Then the flux across $C$ is defined as $\displaystyle\oint_CF\cdot nds$.
+\end{definition}
+
+\begin{definition}[Circulation in $\mathbb{R}^2$]
+Let $F$ be a $C^1$ vector field in $\mathbb{R}^2$ defined on an orientated closed curve $C$ in $\mathbb{R}^2$. Then the circulation across $C$ is defined as $\displaystyle\oint_CF\cdot Tds$.
+\end{definition}
+
+\begin{definition}[Unit Tangent and Unit Normal]
+Let $C$ be an orientated curve in $\mathbb{R}^2$, parametrized by $\gamma(t)=(x(t),y(t))$ for $\gamma:[a,b]\to\mathbb{R}^2$ and $a\le t\le b$, then:
+\[
+T(t)=\frac{(x'(t),y'(t))}{\|\gamma'(t)\|} \text{ and }n(t)=\frac{(y'(t),-x'(t))}{\|\gamma'(t)\|}
+\]
+\end{definition}
+
+\subsection{Conservative Fields and the FTLI}
+\begin{definition}[Conservative Field]
+A vector field $F$ is conservative on an open set $U\subseteq\mathbb{R}^n$ if there exists a function $f$ such that $\nabla f=F$ on $U$. $f$ is called the potential function of $F$.
+\end{definition}
+
+\begin{definition}[Irrotational Vector Field]
+A $C^1$ vector field $F$ is irrotational on an open set $U\subseteq\mathbb{R}^n$ if $(\nabla\times F)(p)=\vec0$ for all $p\in U$.
+\end{definition}
+
+\begin{lemma}
+Let $F$ be a $C^1$ vector field on $U\subseteq\mathbb{R}^n$. If $U$ is convex and $F$ is irrotational on $U$, then $F$ is conservative on $U$.
+\end{lemma}
+
+\begin{theorem}[The Fundamental Theorem of Line Integrals]
+Let $C$ be an orientated curve in $\mathbb{R}^n$ parametrized by $\gamma:[a,b]\to\mathbb{R}^n$. Let $f$ be a real-valued function that is $C^1$ on an open set containing $C$, then:
+\[
+\int_C\nabla f\cdot d\gamma=f(\gamma(b))-f(\gamma(a))
+\]
+\end{theorem}
+
+\begin{definition}[Simply Connected Set]
+A set $D\subseteq\mathbb{R}^2$ is simply connected if:
+\begin{enumerate}[label=(\alph*)]
+\item $D$ is path-connected.
+\item For every closed curves $C\subseteq D$, the region enclosed by $C$ is contained in $D$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}
+Let $F:U\subseteq\mathbb{R}^2\to\mathbb{R}^2$ be a $C^1$ vector field, where $U$ is open. If $U$ is simply connected and $F$ is irrotational on $U$, then $F$ is conservative on $U$.
+\end{theorem}
+
+\subsection{Green's Theorem}
+\begin{theorem}[Green's Theorem, Curl Form]
+Let $F$ be a $C^1$ vector field on a regular region $R\subseteq\mathbb{R}^2$. If the boundary $\partial R$ is a finite disjoint union of positively orientated piecewise curves, then:
+\[
+\oint_{\partial R}F\cdot Tds=\iint_{R}(\nabla \times F)dA
+\]
+Equivalently, let $F=(P,Q)$, so we can also express the theorem as:
+\[
+\oint_{\partial R}Pdx+Qdy=\iint_R \left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)dA
+\]
+\end{theorem}
+
+\begin{theorem}[Green's Theorem, Flux Form]
+Let $F$ be a $C^1$ vector field on a regular region $R\subseteq \mathbb{R}^2$. If the boundary $\partial R$ is a finite disjoint union of positively orientated piecewise curves, then:
+\[
+\oint_{\partial R}F\cdot nds=\iint_R (\nabla\cdot F)dA
+\]
+\end{theorem}
+
+\section{Integration on Surfaces}
+\subsection{Surfaces and Surface Integrals}
+\begin{definition}[Surface Area]
+Let $S\subseteq\mathbb{R}^3$ be a surface parametrized by $G:U\to\mathbb{R}^3$. The surface area of $S$ is defined as:
+\[
+A(S)=\iint_U\|\partial _1 G\times\partial_2 G\|dA
+\]
+\end{definition}
+
+\begin{theorem}[Invariance Of Surface Area]
+Let $G:U\to S$ and $H:V\to S$ be parametrizations of the surface $S\subseteq\mathbb{R}^3$. If $G$ is a parametrization of $H$, then:
+\[
+\iint_U\|\partial_1 G\times\partial_2 G\|dA=\iint_V\|\partial_1 H\times\partial_2 H\|dA
+\]
+\end{theorem}
+
+\begin{definition}[Surface Area]
+Let $S\subseteq\mathbb{R}^3$ be a surface parametrized by $G:U\to\mathbb{R}^3$, then the surface area equals to:
+\[
+A(S)=\iint_S1dS,
+\]
+where $dS=\|\partial_1 G\times\partial_2 G\|dA.$
+\end{definition}
+
+\begin{definition}[Scalar Surface Integral]
+Let $S\subseteq\mathbb{R}^3$ be a surface parametrized by $G:U\to\mathbb{R}^3$. Let $f$ be a bounded real-valued function on $S$. The scalar surface integral of $f$ over $S$ is given by:
+\[
+\iint_S fdS=\iint_U (f\circ G)\|\partial_1G\times\partial_2 G\|dA
+\]
+\end{definition}
+
+\begin{definition}[Orientated Surface]
+An orientated surface $S$ is a set of parametrizations that are reparametrizations of each other with the same orientations.
+\end{definition}
+
+\begin{definition}[Unit Normal]
+The unit normal $n$ of an orientated surface $S\subseteq\mathbb{R}^3$ is a countinuous function $n:S\to\{w\in\mathbb{R}^3, \|w\|=1\}$, which for any parametrization $G:U\to\mathbb{R}^3$ of the orientated surface $S$, is defined by:
+\[
+n(G(u,v))=\frac{(\partial_1 G\times\partial_2 G)(u,v)}{\|(\partial_1 G\times\partial_2 G)(u,v)\|}
+\]
+\end{definition}
+
+\subsection{Circulation, Curl, Flux and Divergence}
+\begin{definition}[Divergence in $\mathbb{R}^3$]
+Let $F=(F_1,F_2,F_3)$ be a $C^1$ vector field in $\mathbb{R}^3$, then the divergence of $F$ at point $p=(x,y,z)$ is:
+\[
+(\nabla\cdot F)(p)=\frac{\partial F_1}{\partial x}+\frac{\partial F_2}{\partial y}+\frac{\partial F_3}{\partial z}
+\]
+\end{definition}
+
+\begin{definition}[Sourceless Vector Field]
+Let $F$ be a $C^1$ vector field in $\mathbb{R}^3$. A point $p\in\mathbb{R}^3$ is a source if $(\nabla\cdot F)(p)>0$. A vector field $F$ is sourceless if for all $p\in \mathbb{R}^3$, $(\nabla \cdot F)(p)=0$.
+\end{definition}
+
+\begin{definition}[Curl in $\mathbb{R}^3$]
+Let $F$ be a $C^1$ vector field in $\mathbb{R}^3$, then the curl of $F$ at point $p=(x,y,z)$ is:
+\[
+(\nabla\times F)(p)=\begin{vmatrix}e_1 & e_2 & e_3\\\partial_x & \partial_y & \partial_z\\F_1&F_2&F_3\end{vmatrix}=\left(\frac{\partial F_3}{\partial y}-\frac{\partial F_2}{\partial x},\frac{\partial F_3}{\partial x}-\frac{\partial F_1}{\partial z}, \frac{\partial F_2}{\partial x}-\frac{\partial F_1}{\partial y}\right)
+\]
+\end{definition}
+
+\begin{definition}[Flux in $\mathbb{R}^3$]
+Let $F$ be a $C^1$ vector field on a regular region $S\subseteq\mathbb{R}^3$. Then the flux over $F$ on $S$ is defined as $\displaystyle\iint_S F\cdot ndS$.
+\end{definition}
+
+\begin{definition}[Circulation in $\mathbb{R}^3$]
+Let $F$ be a $C^1$ vector field on a orientated closed curve $C\subseteq\mathbb{R}^3$. Then the circulation over $F$ on $C$ is defined as $\displaystyle\oint_C F\cdot Tds$.
+\end{definition}
+
+\subsection{Divergence and Classical Stokes' Theorem}
+\begin{theorem}[Divergence Theorem]
+Let $F$ be a $C^1$ vector field on a regular region $V\subseteq\mathbb{R}^3$. If its boundary $\partial V$ is a finite disjoint union of closed piecewise curves, then:
+\[
+\oiint_{\partial V}F\cdot ndS=\iiint_V(\nabla\cdot F)dV
+\]
+\end{theorem}
+
+\begin{theorem}[Classical Stokes' Theorem]
+Let $S\subseteq\mathbb{R}^3$ be a surface orientated with unit normal $n$ and whose boundary $\partial S$ is a finite disjoint union of closed piecewise curves. Let $F$ be a $C^1$ vector field in $\mathbb{R}^3$ on an open set containing $S$. Then:
+\[
+\oint_{\partial S}F\cdot Tds=\iint_S(\nabla\times F)\cdot ndS.
+\]
+\end{theorem}
+\end{document}
