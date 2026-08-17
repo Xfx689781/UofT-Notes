@@ -4,7 +4,7 @@
 \usepackage{graphicx}
 \usepackage{setspace}
 
-\usepackage{hyperref}
+
 \usepackage{esint}
 \usepackage{microtype}
 \usepackage{enumitem}
@@ -25,7 +25,7 @@
 
 \title{MAT237 Notes}
 \author{Fuxuan Xu}
-\date{}
+\date{August 17, 2026}
 
 \begin{document}
 
@@ -89,13 +89,96 @@ For any set $A\subseteq\mathbb{R}^n$, all of the followings hold:
 A sequence in $\mathbb{R}^n$ is a function with domain $\{k\in\mathbb{Z}:k\geq k_0\}$ for some fixed $k_0\in\mathbb{Z}$ and codomain $\mathbb{R}^n$.
 \end{definition}
 \begin{definition}[Subsequence]
-A subsequence 
+Let $x:\mathbb{N}^+\to\mathbb{R}^n$ be a sequence and let $m:\mathbb{N}^+\to\mathbb{N}^+$ be an increasing function. The sequence $\{x_{m_k}\}_{k=1}^\infty$ is a subsequence of the sequence $\{x_k\}_{k=1}^\infty$.
 \end{definition}
+
+\begin{definition}[Convergence of a Sequence]
+Fix a point $p\in\mathbb{R}^n$. A sequence $\{x_k\}_{k=1}^\infty$ converges to $p$ if:
+\[
+\forall \varepsilon>0, \exists K \text{ s.t. } \forall k\in\mathbb{N}, k\ge K\Rightarrow \|x_k-p\|<\varepsilon.
+\]
+We write $\displaystyle \lim_{k\to\infty}x_k=p$ if this holds.
+\end{definition}
+
 \subsection{Open and Closed Sets}
+\begin{definition}[Open Set]
+A set $A\subseteq\mathbb{R}^n$ is open if every point in $A$ is an interior point of $A$.
+\end{definition}
+
+\begin{definition}[Closed Set]
+A set $A\subseteq\mathbb{R}^n$ is closed if every limit points of $A$ belongs to $A$.
+\end{definition}
+
+\begin{theorem}
+A set $A\subseteq\mathbb{R}^n$ is open iff its complement $A^C=\mathbb{R}^n\backslash A$ is closed.
+\end{theorem}
+
 \subsection{Compact Sets}
+
+\begin{definition}[Compact Set]
+A set $A\subseteq\mathbb{R}^n$ is compact if every sequence of $A$ has a subsequence which convergeces to $a\in A^\circ$.
+\end{definition}
+
+\begin{definition}[Bounded and Unbounded Sets]
+A set $A\subseteq\mathbb{R}^n$ is bounded if there exists $R>0$ such that $A\subseteq\{x\in\mathbb{R}^n: \|x\|<R\}$. If $A$ is not bounded, then $A$ is unbounded.
+\end{definition}
+
+\begin{theorem}[Heine-Borel Theorem]
+A set $A\subseteq\mathbb{R}^n$ is compact iff $A$ is closed and bounded.
+\end{theorem}
+
+\begin{theorem}[Bolzano-Weierstrass Theorem]
+Every bounded sequence in $\mathbb{R}^n$ has a convergent subsequence.
+\end{theorem}
+
 \subsection{Limit and Continuity}
+\begin{definition}[Limit]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$. Let $b\in\mathbb{R}^m$, then $b$ is the limit of $f$ at $a$ if:
+\[
+\forall \varepsilon>0, \exists \delta>0 \text{ s.t. } 0<\|x-a\|<\delta\Rightarrow\|f(x)-b\|<\varepsilon
+\]
+\end{definition}
+
+\begin{definition}[Continuity]
+Let $A\subseteq\mathbb{R}^n$ and $f:A\to\mathbb{R}^m$. Let $a$ be an interior point of $A$, then $f$ is continuous at $a$ if:
+\[
+\forall\varepsilon>0, \exists \delta>0 \text{ s.t. } 0<\|x-a\|<\delta\Rightarrow \|f(x)-f(a)\|<\varepsilon
+\]
+\end{definition}
+
+\begin{theorem}[Squeeze Theorem]
+Let $A\subseteq\mathbb{R}^n$ be a set and let $a$ be a limit point of $A$. Let $f,g,h$ be real-valued functions with domain $A$. Assume that there exists $\delta>0$ such that:
+\[
+\forall x\in A, \|x-a\|<\delta\Rightarrow f(x)\le g(x)\le h(x).
+\]
+If $\displaystyle \lim_{x\to a}f(x)=\lim_{x\to a}h(x)=k$, then $\displaystyle\lim_{x\to a}g(x)=k$.
+\end{theorem}
+
 \subsection{Connected and Path-Connected Sets}
 
+\begin{definition}[Path-Connected Set]
+A set $S\subseteq\mathbb{R}^n$ is path-connected if for all $p,q\in S$, there exists curve $\gamma:[a,b]\to S$ such that $\gamma(a)=p,\gamma(b)=q$ and  $\text{im}(\gamma)\subseteq S$.
+\end{definition}
+
+\begin{definition}[Convex Set]
+A set $S\subseteq\mathbb{R}^n$ is convex if for all $t\in [0,1]$ and $p,q\in S$, $tp+(1-t)q\in S$.
+\end{definition}
+
+\begin{theorem}
+Let $S\subseteq\mathbb{R}^n$ be a path-connected set. Let $f$ be a $\mathbb{R}^m$-valued function defined on $S$. If $f$ is continuous on $S$, then $f$ is path-connected on $S$.
+\end{theorem}
+
+\begin{theorem}[Intermediate Value Theorem]
+Let $f$ be a real-valued function defined on $[a,b]$. If $f$ is continuous on $[a,b]$, then $f([a,b])$ is path-connected.
+\end{theorem}
+
+\begin{theorem}[Extreme Value Theorem]
+Let $A\subset\mathbb{R}^n$ and $f:A\to\mathbb{R}$. If $A$ is non-empty and compact and $f$ is continuous on $A$, then $f$ attains its maxima and minima on $A$.
+\end{theorem}
+
+\begin{theorem}[Least Upper Bound Principle]
+Let $S\subseteq\mathbb{R}$ be a non-empty subset of real numbers. If $S$ has a upper bound, then the suprema of $S$ exists.
+\end{theorem}
 \section{Differentiation}
 \subsection{Derivatives}
 \begin{definition}[$j^{th}$ Partial Derivative]
