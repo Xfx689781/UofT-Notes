@@ -46,27 +46,34 @@
 \definecolor{inkColor}{HTML}{2D3138}    % near-black text
 
 % ---------- The 3 "headline" boxes — soft tinted style, no solid blocks ----------
-\newtcbtheorem[number within=section]{definition}{Definition}%
+\newcounter{thmcounter}
+\counterwithin{thmcounter}{section}
+
+\newtcbtheorem[use counter=thmcounter, number within=section]{defbox}{Definition}%
 {colback=defColor!5, colframe=defColor!65, fonttitle=\bfseries,
  coltitle=defColor!75!black, colbacktitle=defColor!12,
  boxrule=0.6pt, arc=1.5mm,
  left=6pt, right=6pt, top=4pt, bottom=4pt,
  breakable, enhanced jigsaw}{def}
 
-\newtcbtheorem[use counter from=definition]{theorem}{Theorem}%
+\newtcbtheorem[use counter=thmcounter, number within=section]{thmbox}{Theorem}%
 {colback=thmColor!6, colframe=thmColor!70, fonttitle=\bfseries,
  coltitle=thmColor!60!black, colbacktitle=thmColor!15,
  boxrule=0.6pt, arc=1.5mm,
  left=6pt, right=6pt, top=4pt, bottom=4pt,
  breakable, enhanced jigsaw}{thm}
 
-\newtcbtheorem[use counter from=definition]{example}{Example}%
+\newtcbtheorem[use counter=thmcounter, number within=section]{exbox}{Example}%
 {colback=exColor!5, colframe=exColor!65, fonttitle=\bfseries,
  coltitle=exColor!70!black, colbacktitle=exColor!12,
  boxrule=0.6pt, arc=1.5mm,
  left=6pt, right=6pt, top=4pt, bottom=4pt,
  breakable, enhanced jigsaw}{ex}
 
+% 只要一个 {标题}，标签自动留空
+\newenvironment{definition}[1]{\begin{defbox}{#1}{}}{\end{defbox}}
+\newenvironment{theorem}[1]{\begin{thmbox}{#1}{}}{\end{thmbox}}
+\newenvironment{example}[1]{\begin{exbox}{#1}{}}{\end{exbox}}
 % =====================================================================
 % ---------- Everything else: PLAIN (no fill, no frame) but with a
 %  quiet vertical rule + generous spacing, so items stay easy to tell
@@ -81,14 +88,14 @@
   {0.6em}{}%             space after head / custom head-spec
 \theoremstyle{quiet}
 
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}[thmcounter]{Proposition}
+\newtheorem{lemma}[thmcounter]{Lemma}
+\newtheorem{corollary}[thmcounter]{Corollary}
 
 \makeatletter
-\let\c@proposition\c@definition
-\let\c@lemma\c@definition
-\let\c@corollary\c@definition
+\newtheorem{proposition}[tcb@cnt@defbox]{Proposition}
+\newtheorem{lemma}[tcb@cnt@defbox]{Lemma}
+\newtheorem{corollary}[tcb@cnt@defbox]{Corollary}
 \makeatother
 
 \renewcommand{\theproposition}{\thedefinition}
@@ -248,37 +255,60 @@ Remark, Proof) is plain text with a bold label, no box.
 \newpage
 
 % =====================================================================
-\section{Day 1 (9.9) --- Continuity and Norms}
+\section{Day 1 (9.9) --- Continuity and Limit (Tentative)}
 % =====================================================================
 \begin{definition}{Continuity (Tentative)}
-\text{A scalar function $f(x_1,\cdots,x_n)$ is continuous if it's continuous on function of each $x_i$. More generally, vector-valued function $f(x_1,\cdots,x_n)$ is continuous if all $f_j(x_1,\cdots,x_n)$ are continuous.}
+A scalar function $f(x_1,\cdots,x_n)$ is continuous if it's continuous on function of each $x_i$. More generally, vector-valued function $f(x_1,\cdots,x_n)$ is continuous if all $f_j(x_1,\cdots,x_n)$ are continuous.
 \end{definition}
 
 \begin{example}{Counterexample}
-\text{Consider the function $f(x,y)=\begin{cases}\frac{xy}{x^2+y^2},(x,y)\ne (0,0)\\0,(x,y)=(0,0)\end{cases}$ is not continuous, although it is continuous for both $x$ and $y$.}
+Consider the function:
+\[
+f(x,y)=\begin{cases}\displaystyle\frac{xy}{x^2+y^2},(x,y)\ne (0,0)\\0,(x,y)=(0,0)\end{cases}.
+\]
+It is not continuous, although it is continuous for both $x$ and $y$.
 \end{example}
 
 \begin{definition}{Limit (Tentative)}
-\text{A scalar function $f:\mathbb{R}^n\to\mathbb{R}$ has its limit exist at $(x_1,\cdots,x_n)$ if for every direction vector $(a_1,\cdots,a_n)$, $\lim_{t\to 0}f(x_1+ta_1,\cdots,x_n+ta_n)$ exists and does not depend on $a=(a_1,\cdots,a_n).$}
+A scalar function $f:\mathbb{R}^n\to\mathbb{R}$ has its limit exist at $(x_1,\cdots,x_n)$ if for every direction vector $(a_1,\cdots,a_n)$, 
+\[
+\lim_{t\to 0}f(x_1+ta_1,\cdots,x_n+ta_n)
+\]
+exists and does not depend on $a=(a_1,\cdots,a_n).$
 \end{definition}
 
 \begin{example}{Counterexample}
-\text{Consider the function $f(x,y)=\begin{cases}\frac{y}{x^2}. x\ne 0\\0,x=0\end{cases}$. We take the direction $(a_1,a_2)$ such that $a_1\ne 0$, and we plug this into $f$ and we have $f(ta_1,ta_2)=\frac{ta_2}{t^2a_1^2}=\frac{a_2}{ta_1^2}$, and when $t\to 0$, the expression goes to $\pm \infty$, and the limit does not exist. }
+Consider the function: 
+\[
+f(x,y)=\begin{cases}\displaystyle\frac{y}{x^2}. x\ne 0\\0,x=0\end{cases}.
+\]
+We take the direction $(a_1,a_2)$ such that $a_1\ne 0$, and we plug this into $f$ and we have:
+\[
+f(ta_1,ta_2)=\frac{ta_2}{t^2a_1^2}=\frac{a_2}{ta_1^2}, 
+\]
+and when $t\to 0$, the expression goes to $\pm \infty$, and the limit does not exist. 
 \end{example}
 
 \begin{definition}{Continuity (Tentative)}
-\text{Let $x=(x_1,\cdots,x_n)\in\mathbb{R}^n$, then $f:\mathbb{R}^n\to\mathbb{R}$ is continuous at $x\in\mathbb{R}^n$ if $\lim_{h\to 0}f(x+h)=f(x)$.}
+Let $x=(x_1,\cdots,x_n)\in\mathbb{R}^n$, then $f:\mathbb{R}^n\to\mathbb{R}$ is continuous at $x\in\mathbb{R}^n$ if:
+\[
+\lim_{h\to 0}f(x+h)=f(x).
+\]
 \end{definition}
 
-To define the term “$\lim$” in $\mathbb{R}^n$, we have to go into the topology of $\mathbb{R}^n$. 
+% =====================================================================
+\newpage
+
+\section{Day 2 (9.11) --- Equivalent Norms and Continuity}
+% =====================================================================
 
 \begin{definition}{Norm}
-\text{A norm on a vector space is a function $\|\cdot\|:V\to \mathbb{R}_{\ge 0}$ such that:
+A norm on a vector space is a function $\|\cdot\|:V\to \mathbb{R}_{\ge 0}$ such that:
 \begin{enumerate}
 \item $\|v\|=0$ iff $v=0$.
 \item $\|tv\|=|t|\|v\|$ for all $t\in\mathbb{R}$ and $v\in V$.
 \item Triangle inequality: $\|v+w\|\le\|v\|+\|w\|$ for all $v,w\in V$.
-\end{enumerate}}
+\end{enumerate}
 \end{definition}
 
 Since $\mathbb{R}^n$ is a vector space, we can define the standard norm of $\mathbb{R}^n$, we let $x=(x_1,\cdots,x_n)$ so we have 
@@ -289,11 +319,6 @@ Another important norm of $\mathbb{R}^n$ is the sup-norm:
 \[
 \|x\|_\infty=\max\{|x_1|,\cdots,|x_n|\}.
 \]
-% =====================================================================
-\newpage
-
-\section{Day 2 (9.11) --- Equivalent Norms, Continuity and Open Sets}
-% =====================================================================
 Consider the norms:\\
 If $\|x\|\le R$, then $x$ is contained in a closed ball with radius $R$. If $\|x\|_\infty\le R$, then $x$ is contained in a closed rectangle $[-R,R]^n$. An example of a norm on an infinite dimensional vector space $C({[a,b]})$ such that $[a,b]\subseteq\mathbb{R}$ is $\|f\|_\infty=\sup\{|f(x)|:x\in[a,b]\}$.
 
@@ -316,31 +341,34 @@ Taking the square root on both sides yields $\|x\| \le \sqrt{n} \|x\|_\infty$.
 Thus, $\|x\|_\infty \le \|x\| \le \sqrt{n} \|x\|_\infty$.
 \end{proof}
 \begin{definition}{Equivalent Norms}
-\text{Two norms $\|\cdot\|_1, \|\cdot\|_2$ on vector space $V$ are equivalent if $\exists c,C>0 \text{ s.t. } c\|x\|_1\le\|x\|_2\le C\|x\|_1$.}
+Two norms $\|\cdot\|_1, \|\cdot\|_2$ on vector space $V$ are equivalent if:
+\[
+\exists c,C>0 \text{ s.t. } c\|x\|_1\le\|x\|_2\le C\|x\|_1.
+\]
 \end{definition}
 
 \begin{example}{}
-\text{$\|\cdot\|_\infty$ and $\|\cdot\|$ are equivalent norms on $\mathbb{R}^n$ since we can choose $c=1, C=\sqrt{n}$ to make 
+$\|\cdot\|_\infty$ and $\|\cdot\|$ are equivalent norms on $\mathbb{R}^n$ since we can choose $c=1, C=\sqrt{n}$ to make 
 \[
 \|x\|_\infty \le \|x\| \le \sqrt{n}\|x\|_\infty.
-\]}
+\]
 \end{example}
 
 \begin{lemma}
 \text{Any two norms on $\mathbb{R}^n$ are equivalent.}
 \end{lemma}
 
-\begin{definition}{Continuous}
-\text{A function $f:A\subseteq\mathbb{R}^n\to\mathbb{R}^m$ is continuous at $x_0\in A$ if:
+\begin{definition}{Continuity}
+A function $f:A\subseteq\mathbb{R}^n\to\mathbb{R}^m$ is continuous at $x_0\in A$ if:
 \[
 \forall\varepsilon>0,\exists\delta>0, \text{ s.t. }\|x-x_0\|<\delta\Rightarrow \|f(x)-f(x_0)\|<\varepsilon.
 \]
-$f$ is continuous if it is continuous everywhere.}
+$f$ is continuous if it is continuous everywhere.
 \end{definition}
 
 There, we can replace the Euclidean norm $\|\cdot\|$ by any equivalent norm. Also, the subset $A$ is any subset of $\mathbb{R}^n$. Moreover, if $f:A\to\mathbb{R}^n$ is continuous and $A_1\subseteq A$, then $f|_A$ is continuous.
 
-\begin{proposition}{Composition of Continuous Functions is Continuous}
+\begin{proposition}[Composition of Continuous Functions is Continuous]
 Let $A\subseteq\mathbb{R}^n, B\subseteq\mathbb{R}^m$, and $f,g$ be functions such that $f:A\to\mathbb{R}^m, g:B\to\mathbb{R}^k$ with $f(A)\subseteq B$. If $f$ is continuous at $x_0$ and $g$ is continuous at $f(x_0)$, then $g\circ f:A\to\mathbb{R}^k$ is continuous at $x_0$. In particular, if $f,g$ are continuous, then $g\circ f$ is continuous.
 \end{proposition}
 
@@ -380,6 +408,10 @@ A function $f:A\to\mathbb{R}^m$ can be expressed as $f=(f_1,\cdots,f_n)$ for $i\
 As an exercise. Hint: use the sup-norm $\|f(x)-f(x_0)\|_\infty$.
 \end{proof}
 
+\newpage
+% =====================================================================
+\section{Day 3 (9.14) --- Topology on $\mathbb{R}^n$}
+
 \begin{definition}{Open Ball}
 \text{The open ball around $x\in\mathbb{R}^n$ is defined as:
 \[
@@ -388,118 +420,1459 @@ B_\varepsilon(x)=\{y\in\mathbb{R}^n\mid\|x-y\|<\varepsilon\}.
 \end{definition}
 
 \begin{definition}{Open Set}
-\text{A subset $M\subseteq\mathbb{R}^n$ is an open set if $\forall x\in M, \exists \varepsilon>0 \text{ s.t. } B_\varepsilon(x)\subseteq M$.}
+\text{A subset $U\subseteq\mathbb{R}^n$ is an open set if $\forall x\in U, \exists \varepsilon>0 \text{ s.t. } B_\varepsilon(x)\subseteq U$.}
 \end{definition}
 
 \begin{definition}{Open Neighborhood}
 \text{An open neighborhood of $x\in\mathbb{R}^n$ is an open subset $U$ with $x\in U$.}
 \end{definition}
 
+\begin{definition}{Open Ball}
+\text{Let $x\in\mathbb{R}^n, \varepsilon>0$, we call $B_\varepsilon(x)=\{y\in\mathbb{R}^n\mid\|x-y\|<\varepsilon\}$ the open ball around $x$.}
+\end{definition}
+
+\begin{definition}{Topological Continuity}
+A function $f:A\to\mathbb{R}^m$ be continuous at $x_0\in A$ if $\forall \varepsilon>0,\exists\delta>0$ such that: 
+\[
+f(A\cap B_\delta(x_0))\subseteq B_\varepsilon(f(x_0)).
+\]
+\end{definition}
+
+\begin{proposition}
+\begin{enumerate}
+\item Every finite intersection of open sets is open.
+\item Every union of open sets is open.
+\item $\emptyset, \mathbb{R}^n$ are open.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}
+\item Suppose $U_1,\cdots,U_k\subseteq\mathbb{R}^n$ are open sets, let $x\in\bigcap_{i=1}^kU_i$, then there exists $\varepsilon_i>0$ such that $B_{\varepsilon_i}(x)\subseteq U$. Let $\varepsilon=\min\{\varepsilon_1,\cdots,\varepsilon_k\}$, then $B_{\varepsilon}(x)\subseteq\bigcap_{i=1}^k U_i$.
+\item Let $\{U_\alpha\mid \alpha\in I\}$ be a collection of open sets, where $I$ is any > set. Let $x\in\bigcup_{x\in I}U_\alpha$, and choose $\beta\in I$ with $x\in U_\beta$. Let $\varepsilon>0$ with $B_\varepsilon(x)\subseteq U_\beta\subseteq\bigcup_{\alpha\in I}U_\alpha$.
+\item As an exercise.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition}
+A function $f:A\to\mathbb{R}^m$ is continuous iff for all open sets $U\subseteq\mathbb{R}^m$, there exists open set $V\subseteq\mathbb{R}^n$ such that $f^{-1}(U)=A\cap V$. If $A$ itself is open, $f:A\to\mathbb{R}^m$ is continuous iff for all open sets $U\subseteq\mathbb{R}^m$, $f^{-1}(U)$ is open.
+\end{proposition}
+
+\begin{proof}
+$(\Rightarrow)$ Suppose $f$ is continuous, and $U\subseteq\mathbb{R}^m$ is open, then for all $x\in f^{-1}(U)$:
+\[
+\exists\varepsilon_x>0\text{ s.t. }B_{\varepsilon_x}(f(x))\subseteq U.
+\]
+By continuity, we can find a $\delta_x>0$, such that: 
+\[
+f(B_{\delta_x}(x)\cap A)\subseteq B_{\varepsilon_x}(f(x))\subseteq U.
+\]
+Let $V=\displaystyle \bigcup_{x\in f^{-1}(U)}B_{\delta_x}(x)$, then $V$ is open and $\displaystyle A\cap V=\bigcup_{x\in f^{-1}(U)}B_{\delta_x}(x)\cap A\subseteq f^{-1}(U)$. Similarly, we also have $A\cap V\supseteq f^{-1}(U)$ since $x\in B_{\delta_x}(x)$. So we have: 
+\[
+A\cap V=f^{-1}(U).
+\]
+
+$(\Leftarrow)$ Let $f:A\to\mathbb{R}^m$ be a function. Let $x_0\in A$, let $\varepsilon>0$ and let $U=B_\varepsilon(f(x_0))$. By assumption, there exists open sets $V\subseteq\mathbb{R}^n$ such that $f^{-1}(U)=A\cap V$. Since $V$ is open, and $x_0\in V$, we can choose $\delta>0$ such that $B_\varepsilon(x_0)\subseteq V$, then: 
+\[
+f^{-1}(B_\varepsilon(f(x_0))=A\cap V\supseteq A \cap B_\delta(x).
+\]
+Hence $f(A\cap B_\delta(x_0))\subseteq B_\varepsilon(f(x_0))$, i.e. $f$ is continuous at $x_0$.
+\end{proof}
+
+\begin{definition}{Closed Set} 
+\text{A subset $A\subseteq\mathbb{R}^n$ is closed if its complement $A^C=\mathbb{R}^n\backslash A$ is open.}
+\end{definition}
+
+\begin{proposition}
+\begin{enumerate}
+\item Finite union of closed subsets are closed.
+\item Arbitrary intersections of closed subsets are closed.
+\item $\emptyset,\mathbb{R}^n$ are closed.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+As an exercise. Hint: take complement.
+\end{proof}
+
+\begin{definition}{Clopen Set}
+\text{A subset $A\subseteq\mathbb{R}^n$ is clopen if it is both closed and open.}
+\end{definition}
+
+\begin{lemma}
+\text{$\emptyset$ and $\mathbb{R}^n$ are the only clopen sets in $\mathbb{R}^n.$}
+\end{lemma}
+
+\begin{proof}
+Let $S\subseteq\mathbb{R}^n$ be a clopen set and assume $S\neq\emptyset$.  Since $S$ is clopen, it is closed, so that $S^C=\mathbb{R}^n\backslash S$ is open. Since $S$ is also open, then $S\cup S^C=\mathbb{R}^n$ is open. Since $S\cap S^C=\emptyset$, and $\mathbb{R}^n$ is connected, by definition, there does not exists two disjoint nonempty open set such that their union equals to $\mathbb{R}^n$, so the only solution is $S=\mathbb{R}^n$ and $S^C=\emptyset$. 
+\end{proof}
 \newpage
 % =====================================================================
-\section{Day 3 --- }
-% =====================================================================
 
 % =====================================================================
-\section{Day 4 --- }
+\section{Day 4 (9.16) --- Interior, Closure, Connectedness and Compactness}
+\begin{theorem}
+Let $S\subseteq\mathbb{R}^n$ be a subset, then:
+\begin{enumerate}
+\item There exists an unique smallest closed subset containing $S$.
+\item There exists an unique largest open subset contained in $S$.
+\end{enumerate}
+These two subsets, are called the closure and the interior of $S$, denoted $\bar S$ and $\operatorname{int} (S)$ respectively, with:
+\[
+\operatorname{int}(S)\subseteq S\subseteq \bar S.
+\]
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}
+\item Defined $\bar S=\bigcap_{A \text{ is closed and }S\subseteq A}A$, so $S$ is closed, and has the desired property.
+\item Define $\operatorname{int}(S)=\bigcup_{U \text{ is open and }U\subseteq S}U$, then $U$ has the desired property.
+\end{enumerate}
+\end{proof}
+
+\begin{example}{}
+\begin{enumerate}
+\item Let $S=\mathbb{Q}$, then $\operatorname{int}(S)=\emptyset$ since the only open subset contained in $S$ is $\emptyset$. Also, $\bar S=\mathbb{R}$ since every closed subset containing $\mathbb{Q}$ is $\mathbb{R}$.
+\item Let $S=\{\frac{1}{n}, n\in\mathbb{N}\}\subseteq\mathbb{R}$, then $\operatorname{int}(S)=\emptyset$ and $\bar S=S\cup\{0\}$.
+\end{enumerate}
+\end{example}
+
+\begin{definition}{Disconnected Set}
+A set $A\subseteq\mathbb{R}^n$ is disconnected if there are two open sets $U,V\subseteq\mathbb{R}^n$ such that: 
+\[
+U\cap V=\emptyset, A\cap U\ne\emptyset, A\cap V\ne\emptyset.
+\]
+\end{definition}
+
+\begin{definition}{Connected Set}
+A set $A\subseteq\mathbb{R}^n$ is connected if it is not disconnected, that is, if there does not exists two open sets $U,V\subseteq\mathbb{R}^n$ such that: 
+\[
+U\cap V=\emptyset,A\cap U\ne\emptyset,A\cap V\ne\emptyset.
+\]
+\end{definition}
+
+\begin{example}{}
+\begin{enumerate}
+\item Let $A_1=\mathbb{R}\backslash{\{0\}}$, then $A_1$ is disconnected, since we can take: 
+\[
+U=\{x\mid x>0\},V=\{x\mid x<0\},
+\]
+such that $U\cap V=\emptyset$, $A_1\cap U\ne\emptyset$ and $A_1\cap V\ne\emptyset$.
+\item Let $A_2=\mathbb{R}^2\backslash\{(0,0)\}\subseteq\mathbb{R}^2$, then $A_2$ is connected.
+\item Let $A_3=\mathbb{R}^2\backslash\mathbb{S}^1\subseteq\mathbb{R}^2$, where $\mathbb{S}^1=\{(x,y)\in\mathbb{R}^2\mid x^2+y^2=1\}.$ Then $A_3$ is disconnected, since we can take: 
+\[
+U=\{(x,y)\in\mathbb{R}^2\mid x^2+y^2<1\},V=\{(x,y)\in\mathbb{R}^2\mid x^2+y^2>1\},
+\]
+so that $U\cap V=\emptyset$, and $A_3\cap U\ne\emptyset, A_3\cap V\ne\emptyset.$
+\end{enumerate}
+\end{example}
+
+\begin{definition}{Path}
+A path is a subset $A\subseteq\mathbb{R}^n$, which is a continuous function $\gamma:[0,1]\to A$.
+\end{definition}
+
+\begin{definition}{Path-Connected}
+A subset $A\subseteq\mathbb{R}^n$ is path-connected if for all $x,y\in A$, there exists a path $\gamma:[0,1]\to A$ such that $\gamma(0)=x, \gamma(1)=y$.
+\end{definition}
+
+\begin{lemma}
+\begin{enumerate}
+\item If a subset $A\subseteq\mathbb{R}^n$ is path-connected, then $A$ is connected.
+\item If a subset $U\subseteq\mathbb{R}^n$ is open, then $U$ is path-connected iff $U$ is connected.
+\end{enumerate} 
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}
+\item Suppose $A$ is disconnected, we choose $U_1,U_2\subseteq\mathbb{R}^n$, and consider $x\in A\cap U_1, y\in A\cap U_2$, pick a path $\gamma \in A$ from $x$ to $y$, consider $\gamma^{-1}(U_1)\cup \gamma^{-1}(U_2)=[0,1]$, and we get contradiction, so $A$ is connected.
+
+\item As an exercise.
+\end{enumerate}
+\end{proof}
+
+\begin{example}{}
+There are some sets that are connected but not path-connected:
+\begin{enumerate}
+\item Let $X=\{(x,\sin(\frac{1}{x}))\mid0<x\le 1\}\cup\{(0,y)\mid -1\le y\le 1\}$, then $X$ is connected but not path-connected.
+\end{enumerate}
+\end{example}
+
+\begin{definition}{Open Cover}
+An open cover of a subset $A\subseteq\mathbb{R}^n$ is a collection of open subsets $\{U_\alpha\mid\alpha\in I\}$ such that:
+\[
+A\subseteq\bigcup_{\alpha\in I}U_\alpha.
+\]
+\end{definition}
+
+\begin{definition}{Compact Set}
+A subset $C\subseteq\mathbb{R}^n$ is compact if for all open cover $\{U_\alpha\mid\alpha\in I\}$ of $C$, there exist finitely many $\alpha_1,\cdots,\alpha_r$ such that:
+\[
+C \subseteq\bigcup_{i=1}^rU_{\alpha_i}.
+\]
+\end{definition}
+\newpage
+% =====================================================================
+\section{Day 5 (9.18) --- Heine-Borel Theorem}
+% =====================================================================
+\begin{definition}{Bounded}
+\text{A set $A\subseteq\mathbb{R}^n$ is bounded if there exists $R>0$ such that $A\subseteq B_R(0)$}.
+\end{definition}
+
+\begin{theorem}{Heine-Borel Theorem}
+\text{A set $C\subseteq\mathbb{R}^n$ is compact iff $C$ is closed and bounded.}
+\end{theorem}
+
+\begin{proof}
+$(\Rightarrow)$ 
+Assume $C$ is compact, consider the open cover by $\{B_R(0)\mid R>0\}$. By compactness, there exists finitely many suffice. Let $\cup_{i=1}^n B_{R_i}(0)\supset C$, then we take $R=\max\{R_i\}$, then $C\subset B_{R}(0)$, thus $C$ is bounded.\\
+To show that $C$ is closed, we have to show $\mathbb{R}^n\backslash C$ is open. Thus we have to show that for all $x\in\mathbb{R}^n\backslash C$, there exists $\varepsilon>0$ such that $B_\varepsilon(x)\subset\mathbb{R}^n\backslash C$. \\
+Let $x\in\mathbb{R}^n\backslash C$, then for every $y\in C$, let $r_=\frac{1}{3}\|x-y\|$, and cover $C$ by $\{B_{r_y}(y)\mid y\in C\}$. Since $C$ is compact, there exists a finite subcover $B_{r_{y_{1}}},\cdots,B_{r_{y_{n}}}$ such that $\cup_{i=1}^n B_{r_{y_i}}(y_i)\supset C$, then let $\varepsilon=\min\{r_{y_1},\cdots,r_{y_n}\}$, then $B_\varepsilon(x)\cap B_{r_{y_i}}(y_i)=\emptyset$, then $B_\varepsilon(x)\cap \cup_{i=1}^n B_{r_{y_i}}(y_i)=\emptyset$, thus $B_\varepsilon(x)\cap C=\emptyset$, so $B_\varepsilon(x)\subseteq\mathbb{R}^n\backslash C$.\\
+
+$(\Leftarrow)$
+Suppose $C$ is closed and bounded, let $\{U_\alpha\mid \alpha\in I\}$ be an open cover, WTS $\exists U_{\alpha_1},\cdots,U_{\alpha_n}$ such that $\cup_{i=1}^nU_{\alpha_i}\supset C$.\\
+Suppose that there does not exist such finite subcover, since $C$ is bounded, we choose a cube of side length $R$ that contains it, i.e.
+\[
+C\subseteq A=\Pi_{i=1}^n[a_i,b_i], b_i-a_i=R,
+\]
+and we subdivide $A$ into $2^n$ subcubes of the side length $\frac{1}{2}R$. Let $A_1\subseteq A$ be a subcube such that $A_1\cap C$ cannot be covered by finitely many open set $U_\alpha$'s.
+Thus, we iterate this process to create cubes $A\supseteq A_1\supseteq A_2\supseteq\cdots$, where $A_k$ has side length $\frac{R}{2^k}\to 0$, and $A_k\cap C$ cannot be cover by finite many open set $U_\alpha$'s.
+Write $A_k=\prod_{i=1}^n[a_{k_i},b_{k_i}]$, let $x_i=\lim_{k\to\infty}a_k=\lim_{k\to\infty}b_k\in\cap_k[a_{k_i},b_{k_i}].$
+Let $x=(x_1,\cdots,x_n)\in\bigcap_{k=1}^\infty A_k$.
+Thus, $x\in C$.
+Since $C$ is closed, we can choose $\varepsilon>0$ such that $B_\varepsilon(x)\subseteq\mathbb{R}^n\backslash C$, but $A_k\cap C\ne\emptyset$, which gives the contradiction, so $x\in C\cap\bigcap_{k=1}^\infty A_k$.
+Since $\{U_\alpha\}$ is a covering, we can choose $\alpha$ such that $x\in U_\alpha$. Since $U_\alpha$ is open, we can choose $\varepsilon>0$ with $B_\varepsilon(x)\subseteq U_\alpha$, and we can choose $A_k$ with $A_k\subseteq B_\varepsilon(x)\subseteq U_\alpha$.
+So $A_k\cap C\subseteq U_\alpha$, thus this gives the contradiction
+
+\end{proof}
+
+\newpage
+%=====================================================================
+\section{Day 6 (9.21) --- Consequences of Compactness}
 % =====================================================================
 
+\begin{theorem}{Images of Compact Sets Under Continuous Maps are Compact}
+Let $A\subseteq\mathbb{R}^n$ and suppose $f:A\to\mathbb{R}^m$ is continuous. Let $C\subseteq\mathbb{R}^n$ be compact with $C\subseteq A$, then $f(C)$ is compact.
+\end{theorem}
 
+\begin{proof}
+Let $\{U_\alpha\mid\alpha\in I\}$ be an open cover of $f(C), since $f$ is continuous, $f^{-1}(U_\alpha)=A\cap V_\alpha$, where $V_\alpha\subseteq\mathbb{R}^n$ is open, and $\{V_\alpha\mid\alpha\in I\}$ is an open cover of $C$, then for $x\in C, f(x)\in U_\alpha$, $x\in f^{-1}(U_\alpha)=A\cap V_\alpha\subseteq V_\alpha$. Hence, there exists finite subcovers $V_1\cdots,V_\alpha$ such that $f(C)\subseteq\bigcup_{i}V_i$ \end{proof}
+
+\begin{corollary}[Extreme Value Theorem]
+Suppose that $f:A\to\mathbb{R}$ is a continuous function, and let $C\subseteq\mathbb{R}^n$ be compact, with $C\subseteq A$, then $f|_C:C\to\mathbb{R}$ take on a maxima and minima on $C$.
+\end{corollary}
+
+\begin{proof}
+Since $f(C)\subseteq\mathbb{R}$ is compact, by Heine-Borel Theorem, it is closed and bounded. Let $b=\sup(f(C)), a=\inf(f(C))$, since $C$ is closed, and $a,b$ are the minima and maxima of $f|_C$ on $C$.
+\end{proof}
+
+\begin{theorem}{$\varepsilon$-Neighborhood Theorem}
+Let $C\subseteq\mathbb{R}^n$ be a compact set, and let $U\subseteq\mathbb{R}^n$ be an open subset with $C\subseteq U$. Then, there exists $\varepsilon>0$ such that the $\varepsilon$-neighborhood of $C$:
+\[
+\{y\in\mathbb{R}^n: \|x-y\|<\varepsilon\text{ for some } x\in C\}
+\]
+is centered in $U$.
+\end{theorem}
+
+\begin{proof}
+For all $x\in C$, we choose $r_x>0$ such that $B_{r_x}\subseteq U$, then $\{B_{\frac{r_x}{2}}(x)\mid x\in C\}$ covers $C$. By compactness, $B_{\frac{r_{x_1}}{2}}(x_1),\cdots,B_{\frac{r_{x_n}}{2}}(x_n)$ cover $ $, so we let $\varepsilon=\min\{\frac{r_{x_1}}{2},\cdots,\frac{r_{x_n}}{2}\}$. Now we suppose that there is an $y\in\mathbb{R}^n$, such that $x\in C$ with $\|x-y\|<\varepsilon$. Choose $i$ such that $x\in B_\frac{r_x}{2}(x)$ and $\|x-x_i\|<\frac{r_x}{2}$, then $\|y-x_i\|\le \|y-x\|+\|x-x_i\|<\varepsilon+\frac{r_{x_i}}{2}\le r_{x_i}$, so $y\in B_{r_{x_i}}(x_i)\subseteq U$.
+\end{proof}
+
+\begin{definition}{Uniform Continuity}
+Let $A\subseteq\mathbb{R}^n$, then a function $f:A\to\mathbb{R}^m$ is uniformly continuous if:
+\[
+\forall\varepsilon>0,\exists\delta>0 \text{ s.t. }\forall x,y\in A, \|x-y\|<\delta\Rightarrow\|f(x)-f(y)\|<\varepsilon.
+\]
+\end{definition}
+
+\begin{theorem}{}
+Let $C\subseteq\mathbb{R}^n$ be compact, and let $f:C\to\mathbb{R}^m$ be continuous, then $f$ is uniformly continuous.
+\end{theorem}
+
+\begin{proof}
+Let $\varepsilon>0$ be given. For all $x\in C$, choose $r_x>0$, such that for all $y\in C$, $\|x-y\|<r_x\Rightarrow \|f(x)=f(y)\|<\varepsilon$. And the sets $\{B_{\frac{r_x}{2}}(x)\mid x\in C\}$ covers $C$, and since $C$ is compact, there exists finite subcover $B_\frac{r_{x_1}}{2}(x_1)\cdots, B_\frac{r_{x_n}}{2}(x_n)$, so let $\delta=\min\{\frac{r_{x_1}}{2},\cdots,\frac{r_{x_n}}{2}\}$. Let $x,y\in C$, with $\|x-\|y<\delta$, then choose $i$ with $x\in B_\frac{r{x_i}}{2}(x_i)$, so $\|x-x_i\|<\frac{r_{x_i}}{2}$, and $\|y-x_i\|\le\|y-x\|+\|x-x_i\|<\delta+\frac{r_{x_i}}{2}\le r_{x_i}$, thus $\|f(x)-f(x_i)\|<\frac{\varepsilon}{2}$ and $\|f(y)-f(x_i)\|<\frac{\varepsilon}{2}$, giving that $\|f(x)-f(y)\|\le\|f(x)-f(x_i)\|+\|f(y)-f(x_0\|=\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon$.
+\end{proof}
+
+\newpage
 % =====================================================================
-\section{Day 5 --- }
+\section{Day 7 (9.23) --- Limit and Differentiability}
+% ====================================================================
+\begin{definition}{Limit}
+Let $A\subseteq\mathbb{R}^n$ be a set and let $f:A\to\mathbb{R}^m$, let $c\in\bar A$, then we write:
+\[
+\lim_{x\to c}f(x)=L,
+\]
+if $\forall\varepsilon>0,\exists\delta>0\text{ s.t. }\forall x\in A,\|x-c\|<\delta\Rightarrow \|f(x)-L\|<\varepsilon.$\\
+Note that we did not exclude $x=c$, and this convention is common in topology.
+\end{definition}
+
+\begin{example}{}
+Let:
+\[
+f(x)=\begin{cases}0,\text{if } x\ne 0,\\1,\text{if } x=0\end{cases},
+\]
+then with our definition, $\lim_{x\to 0}f(x)$ does not exist, but with the other convention, we'd say $\lim_{x\to 0}f(x)=0$. \\
+With our definition:
+\[
+\lim_{x\to 0,x\ne 0}f(x)=0.
+\]
+\end{example}
+
+\begin{proposition}
+Let $A\subseteq\mathbb{R}^n$, and a function $f:A\to\mathbb{R}^m$ is continuous function at $c\in A$ iff:
+\[
+\lim_{x\to c}f(x)=f(c).
+\]
+\end{proposition}
+
+Recall that from MAT$157$ we defined that $f(x)$ is differentiable at $x=c$ if:
+\[
+f'(c)=\lim_{x\to c,x\ne c}\frac{f(x)-f(c)}{x-c}.
+\]
+In MAT$257$ we generalized this definition of differentiability into $\mathbb{R}^n$. Our idea is to pick an arbitrary point $a\in\mathbb{R}^n$ and consider a direction of $a$.
+
+\begin{definition}{Directional Derivative}
+Let $U\subseteq\mathbb{R}^n$ be an open set and let $f:U\to\mathbb{R}^m$ be a function, then the directional derivative of $f$ at $x=c$ with the directional vector $v\in\mathbb{R}^n$ is defined as:
+\[
+D_vf(c)=\lim_{h\to 0,h\ne 0}\frac{f(c+hv)-f(c)}{h}.
+\]
+\end{definition}
+
+\begin{definition}{Partial Derivative}
+Let $e_i$ be the $i$-th standard basis vector, the $i$-th partial derivative of $f$, denoted by $\frac{\partial f}{\partial x_i}$, at $x=c$, is defined as:
+\[
+\frac{\partial f}{\partial x_i}(c)=D_{e_i}f(c)
+\]
+Equivalently:
+\[
+\frac{\partial f}{\partial x_i}(c)=\lim_{h\to 0,h\ne 0}\frac{f(c+he_i)-f(c)}{h}.
+\]
+\end{definition}
+
+\begin{example}{}
+Let $f(x,y,z)=x\sin y+xyz^2$, then:
+\[
+\frac{\partial f}{\partial x}(x,y,z)=\sin y+z^2y,\text{ }
+\frac{\partial f}{\partial y}(x,y,z)=x\cos y+z^2x,\text{ }
+\frac{\partial f}{\partial z}(x,y,z)=2xyz
+\]
+\end{example}
+
+What does it mean for $f$ to be differentiable at $c$? We know that in MAT157, $f$ is differentiable at $c$ then $f$ is continuous at $c$, does it still hold in $\mathbb{R}^n$? We have some examples:
+\begin{example}{}
+$f$ differentiable $\Rightarrow$ all partial derivatives exist, but $\Leftarrow$ fails. 
+Let:
+\[
+f(x,y)=\begin{cases}\frac{xy}{x^2+y^2}, (x,y)\ne (0,0)\\0,(x,y)=(0,0)\end{cases}
+\],
+then all $\frac{\partial f}{\partial x_i}$ exist, but $f$ is not continuous.
+\end{example}
+
+\begin{example}{}
+$f$ differentiable $\Rightarrow$ all directional derivatives exist, but $\Leftarrow$ fails. 
+Let:
+\[
+f(x,y)=\begin{cases}\frac{yx^2}{x^4+y^2}, (x,y)\ne (0,0)\\0, (x,y)=(0,0)\end{cases}
+\]
+Let $v=(v_1,v_2)$, then $D_vf(0)=\begin{cases}\frac{v_1^2}{v_2}, v_2\ne 0\\0,v_2=0\end{cases}$, all directional derivatives exist but $f$ is not continuous.
+\end{example}
+
+And finally we define the differentiabililty of $f$ at $x=c$.
+\begin{definition}{Differentiable}
+Let $U\subseteq\mathbb{R}^n$ be an open set. Let $f:U\to\mathbb{R}^m$ be a function, then $f$ is differentiable at $x=c$ if there exists a linear transformation $M:\mathbb{R}^n\to\mathbb{R}^m$ such that:
+\[
+\lim_{h\to 0,h\ne 0}\frac{f(c+h)-f(c)-M(h)}{\|h\|}=0.
+\]
+\end{definition}
+
+\newpage
 % =====================================================================
+\section{Day 8 (9.25) --- Differentiation}
+% ====================================================================
+\begin{definition}{Differentiable}
+Let $U\subseteq\mathbb{R}^n$ be an open set, and let $f:U\to\mathbb{R}^m$ be a function, then $f$ is differentiable at $c\in U$ if there exists a linear map $M:\mathbb{R}^n\to\mathbb{R}^m$ such that:
+\[
+f(x)=f(c)+M(x-c)+r(x),
+\]
+where $\displaystyle\lim_{x\to c,x\ne c}\frac{\|r(x)\|}{\|x-c\|}=0.$
+\end{definition}
 
+\begin{lemma}{}
+The map $M:\mathbb{R}^n\to\mathbb{R}^m$ in the definition above (if it exists) is unique.
+\end{lemma}
 
+\begin{proof}
+Suppose $f(x)=f(c)+M_1(x-c)+r_1(x)=f(c)+M_2(x-c)+r_2(x)$,
+where $r_1(x),r_2(x)$ satisfy $\displaystyle\lim_{x\to c}\frac{\|r_i(x)\|}{\|x-c\|}=0$. Then:
+\[
+(M_1-M_2)(x-c)+r_1(x)-r_2(x)=0
+\]
+Hence:
+\[
+\|(M_1-M_2)(x-c)\|=\|r_1(x)-r_2(x)\|
+\]
+So we divide by $\|x-c\|$, and we obtain:
+\[
+\frac{\|(M_1-M_2)(x-c)\|}{\|x-c\|}=\frac{\|r_1(x)-r_2(x)\|}{\|x-c\|}\le\frac{\|r_1(x)\|}{\|x-c\|}+\frac{\|r_2(x)\|}{\|x-c\|}
+\]
+Thus:
+\[
+\lim_{x\to c}\frac{\|(M_1-M_2)(x-c)\|}{\|x-c\|}=0
+\]
+Fix $a\ne 0$. Since $U$ is open, $c+ta\in U$ for $|t|$ small, and $c+ta\ne c$ for $t\ne 0$. Then
+\[
+\frac{\|(M_1-M_2)(ta)\|}{\|ta\|}=\frac{|t|\,\|(M_1-M_2)a\|}{|t|\,\|a\|}=\frac{\|(M_1-M_2)a\|}{\|a\|},
+\]
+which is independent of $t$. Its limit as $t\to0$ is $0$, so $(M_1-M_2)a=0$.
+\end{proof}
+
+\begin{definition}{Derivative}
+In this case, the linear map $M$ is called the derivative of $f$ at $c$, denoted $Df(c)$.
+\end{definition} 
+
+\begin{example}{}
+If $f(x)=Mx+b$, where $M:\mathbb{R}^n\to\mathbb{R}^m$ is linear, and $b\in\mathbb{R}^m$, then $f$ is differentiable everywhere, with $Df(c)=M$.
+\end{example}
+
+\begin{proposition}
+Let $U\subseteq\mathbb{R}^n$ be an open set, and let $f:U\to\mathbb{R}^m$ be a function. If $f$ is differentiable at $c\in U$, then it is continuous at $c$.
+\end{proposition}
+
+\begin{proof}
+We know $f(x)=f(c)+Df(c)(x-c)+r(x)$, and $\displaystyle\lim_{x\to c,x\ne c}\frac{\|r(x)\|}{\|x-c\|}=0$, then:
+\[
+\|r(x)\|=\frac{\|r(x)\|}{\|x-c\|}\cdot\|x-c\|\to 0,
+\]
+thus $\displaystyle\lim_{x\to c}r(x)=0$. Also,  since $Df(c)$ is linear (hence continuous), 
+\[
+\lim_{x\to c} Df(c)(x-c)=0,
+\]
+hence there is $\displaystyle\lim_{x\to c}f(x)=f(c)$, hence $f$ is continuous at $c$.
+\end{proof}
+
+\begin{proposition}
+Let $U\subseteq\mathbb{R}^n$ be an open set, and let $f:U\to\mathbb{R}^m$ be a function. If $f$ is differentiable at $c\in U$, then all directional derivatives $D_vf(c)$ for vector $v\in\mathbb{R}^n$ exist, and:
+\[
+D_vf(c)=Df(c)\cdot v
+\]
+\end{proposition}
+
+\begin{proof}
+For $v=0$, both sides equal to $0$, so we assume $v\ne 0$, then let $x=c+tv$, we have:
+\[
+\frac{f(c+tv)-f(c)}{t}=Df(c)\cdot v+\frac{r(c+tv)}{t},
+\]
+but $\lim_{t\to 0}\frac{\|r(c+tv)\|}{\|t\|}=\|v\|\lim_{t\to 0}\frac{\|r(c+tv)\|}{\|tv\|}=0$. Hence:
+\[
+\lim_{t\to 0}\frac{f(c+tv)-f(c)}{t}=D_vf(c)=Df(c)\cdot v.
+\]
+\end{proof}
+
+Taking $v=e_j$ in the proposition above, we get
+$Df(c)e_j = D_{e_j}f(c)=\frac{\partial f}{\partial x_j}(c)
+=\Big(\tfrac{\partial f_1}{\partial x_j}(c),\dots,\tfrac{\partial f_m}{\partial x_j}(c)\Big)^T$.
+Since the $j$-th column of the matrix of the linear map $Df(c)$ is $Df(c)e_j$, the matrix of $Df(c)$ is:
+\[
+Df(c)=
+\begin{pmatrix}
+\frac{\partial f_1}{\partial x_1}(c) & \cdots & \frac{\partial f_1}{\partial x_n}(c) \\
+\vdots & \ddots & \vdots \\
+\frac{\partial f_m}{\partial x_1}(c) & \cdots & \frac{\partial f_m}{\partial x_n}(c)
+\end{pmatrix}
+\]
+And it is called the Jacobian matrix of $f$ at $c$.
+
+\newpage
 % =====================================================================
+\section{Day 9 (9.28) --- Curves, Gradients, and Level Sets}
+% ====================================================================
+\begin{example}{Special Cases}
+\begin{enumerate}
+\item When $n=1$, a continuous map $\gamma:(a,b)\to\mathbb{R}^m$ is called a curve in $\mathbb{R}^m$. If $\gamma$ is differentiable at $t_0\in (a,b)$, then we call:
+\[
+\gamma'(t_0)=D\gamma(t_0)=\begin{pmatrix}\gamma_1'(t_0)\\\vdots\\\gamma_m'(t_0)\end{pmatrix}
+\]
+the velocity vector of $\gamma$ at $t_0$, and $\|\gamma'(t_0)\|$ is called the speed of $\gamma$ at $t_0$. Notice that if $\gamma$ is differentiable everywhere, then $t\to \gamma'(t)$ is also a curve, then the second derivative, if it exists, $\gamma''(t)$ is called the acceleration. For curves with constant speed, they have zero acceleration.
 
-\section{Day 6 --- }
+\item When $m=1$, the function $f:U\subseteq\mathbb{R}^n\to\mathbb{R}^m$ is called a scalar function. Suppose $f$ is differentiable at $c$, then $Df(c)$ is a vector, where:
+\[
+Df(c)=\left(\frac{\partial f}{\partial x_1}(c),\cdots,\frac{\partial f}{\partial x_n}(c)\right), 
+\]
+and this is called the gradient of $f$ at $c$, denoted $\nabla f(c)$. The only difference between $Df(c)$ and $\nabla f(c)$ is that $Df(c)$ is the row vector and $\nabla f(c)$ is the column vector, i,e, 
+\[
+\nabla f(c)=\begin{pmatrix}\frac{\partial f}{\partial x_1}(c)\\\vdots\\\frac{\partial f}{\partial x_n}(c)\end{pmatrix}.
+\]
+\end{enumerate}
+\end{example}
+
+\begin{definition}{Critical Point}
+A point $c\in U$ is a critical point of $f:U\in\mathbb{R}^n\to\mathbb{R}^m$ if $\nabla f(c)=0$.
+\end{definition}
+
+\begin{proposition}
+Suppose $f$ has a local maximum at $c\in U$, then:
+\[
+\exists\varepsilon>0 \text{ s.t. }\forall x\in B_\varepsilon(c), f(x)\le f(c).
+\]
+If $f$ is differentiable at $c$, then $\nabla f(c)=0$.
+\end{proposition}
+
+\begin{proof}
+For any $c\in\mathbb{R}^n$, we let $g(t)=f(c+ta)$. For $|t|$ that is sufficiently small, we have:
+\[
+G(t)\le g(0)=f(c)\Rightarrow g'(0)=0, 
+\]
+which gives:
+\[
+D_af(c)=\lim_{t\to 0}\frac{f(c+ta)-f(c)}{t}=0\Rightarrow\nabla f(c)=0
+\]
+\end{proof}
+
+\begin{example}{}
+\begin{enumerate}
+\item Let $f(x,y)=x^2+y^2$, then the level sets $f^{-1}(c)$ are circles, and:
+\[
+\nabla f(x,y)=\begin{pmatrix}2x\\2y\end{pmatrix}.
+\]
+\item Let $g(x,y)=x^2-y^2$, then the level sets of $g$ are the hyperbolas, and:
+\[
+\nabla g(x,y)=\begin{pmatrix}2x\\-2y\end{pmatrix}.
+\]
+\item Let $h(x,y)=y-x^2$, then the level sets of $h$ are parabolas, and:
+\[
+\nabla h(x,y)=\begin{pmatrix}-2x\\1\end{pmatrix}.
+\]
+\end{enumerate}
+\end{example}
+
+\begin{lemma}
+$\nabla f(x_0)$ is always orthogonal to the level set through $x_0$. More precisely, every differentiable curve $\gamma:\mathbb{R}\to\mathbb{R}^n$ with $\gamma(t_0)=x_0$ and $f(\gamma(t))$ is a constant, we have:
+\[
+\langle\gamma'(t_0),\nabla f(\gamma(t_0)\rangle=0.
+\]
+\end{lemma}
+
+\begin{proof}
+We take the derivative of $f(\gamma(t))$, and we obtain:
+\[
+0=\frac{d}{dt}f(\gamma(t)),
+\]
+now by the Chain Rule:
+\[
+0=\sum_{i=1}^n\frac{\partial f}{\partial x_i}(\gamma(t))\frac{d\gamma_i}{dt}
+=\langle\nabla f(\gamma(t)),\gamma'(t)\rangle.\]
+\end{proof}
+
+\newpage
 % =====================================================================
-
-
+\section{Day 10 (9.30) --- Continuous Differentiability}
 % ====================================================================
 
+\begin{lemma}[Necessary Condition for Differentiability]
+Let $U\subseteq\mathbb{R}^n$ be an open set and let $f:U\to\mathbb{R}^m$ be a function. A necessary condition for the differentiability of $f$ at $c\in U$ is that all $\frac{\partial f_i}{\partial x_j}(c)$ exist, but this condition is not sufficient.
+\end{lemma}
 
-\section{Day 7 --- }
+\begin{theorem}
+Suppose $U\subseteq\mathbb{R}^n$ is an open set, and $f:U\to\mathbb{R}^m$ is a function such that all $\frac{\partial f_i}{\partial x_j}(x)$ exist for all $x\in U$. If they are all continuous on $U$, then $f$ is differentiable on $U$.
+\end{theorem}
+
+\begin{proof}
+Let $c\in U$ be given, and let $M$ be the Jacobian matrix
+\[
+M=\begin{pmatrix}
+\frac{\partial f_1}{\partial x_1}(c)&\cdots&\frac{\partial f_1}{\partial x_n}(c)\\
+\vdots&\ddots&\vdots\\
+\frac{\partial f_m}{\partial x_1}(c)&\cdots&\frac{\partial f_m}{\partial x_n}(c)
+\end{pmatrix}.
+\]
+Define $r(x)$ by
+\[
+f(x)=f(c)+M(x-c)+r(x);
+\]
+we have to prove that $\displaystyle\lim_{x\to c}\frac{\|r(x)\|}{\|x-c\|}=0$.
+
+Choose $\delta>0$ such that $B_\delta(c)\subseteq U$. We consider $x\in B_\delta(c)$; then the rectangular box with opposite corners $c$ and $x$ is contained in $B_\delta(c)\subseteq U$. Explicitly, we write $h=x-c=\sum_{i=1}^n h_ie_i$, where $e_i\in\mathbb{R}^n$ is the $i$-th standard basis vector. Set
+\[
+c^{(0)}=c,\qquad c^{(j)}=c+\sum_{i=1}^{j}h_ie_i\quad(j=1,\dots,n),
+\]
+so that $c^{(n)}=x$ and
+\[
+f_i(x)=f_i(c)+\sum_{j=1}^n\bigl(f_i(c^{(j)})-f_i(c^{(j-1)})\bigr).
+\]
+(Note: $c^{(j)}$ and $c^{(j-1)}$ differ only in the $j$-th coordinate.)
+
+We'll use the Mean Value Theorem: if $g:[a,b]\to\mathbb{R}$ is continuous, and differentiable on $(a,b)$, then there exists $\xi\in(a,b)$ such that
+\[
+g(b)-g(a)=g'(\xi)(b-a).
+\]
+Applying this to $f_i(c^{(j)})-f_i(c^{(j-1)})$, there exists $\xi_{ij}$ on the segment from $c^{(j-1)}$ to $c^{(j)}$ such that
+\[
+f_i(c^{(j)})-f_i(c^{(j-1)})=\frac{\partial f_i}{\partial x_j}(\xi_{ij})\,h_j.
+\]
+Thus
+\[
+f_i(x)-f_i(c)=\sum_{j=1}^n\frac{\partial f_i}{\partial x_j}(\xi_{ij})\,h_j.
+\]
+On the other hand,
+\[
+\bigl(M(x-c)\bigr)_i=\sum_{j=1}^n\frac{\partial f_i}{\partial x_j}(c)\,h_j.
+\]
+Hence
+\[
+r_i(x)=\sum_{j=1}^n\left(\frac{\partial f_i}{\partial x_j}(\xi_{ij})-\frac{\partial f_i}{\partial x_j}(c)\right)h_j
+\;\Rightarrow\;
+|r_i(x)|\le\sum_{j=1}^n\left|\frac{\partial f_i}{\partial x_j}(\xi_{ij})-\frac{\partial f_i}{\partial x_j}(c)\right||h_j|.
+\]
+Let
+\[
+a_{ij}(x)=\sup_{\|y-c\|\le\|x-c\|}\left|\frac{\partial f_i}{\partial x_j}(y)-\frac{\partial f_i}{\partial x_j}(c)\right|.
+\]
+Since $\|\xi_{ij}-c\|\le\|x-c\|$, the summand above is at most $a_{ij}(x)|h_j|$. By continuity of the partial derivatives,
+\[
+\lim_{y\to c}\left(\frac{\partial f_i}{\partial x_j}(y)-\frac{\partial f_i}{\partial x_j}(c)\right)=0
+\;\Rightarrow\;
+\lim_{x\to c}a_{ij}(x)=0.
+\]
+Let $a(x)=\max_{i,j}a_{ij}(x)$; then we also have $\lim_{x\to c}a(x)=0$. Moreover,
+\[
+|r_i(x)|\le a(x)\sum_{j=1}^n|h_j|=a(x)\sum_{j=1}^n|x_j-c_j|\le \sqrt{n}\,a(x)\|x-c\|.
+\]
+Thus
+\[
+\frac{|r_i(x)|}{\|x-c\|}\le \sqrt{n}\,a(x)
+\;\Rightarrow\;
+\lim_{x\to c}\frac{|r_i(x)|}{\|x-c\|}=0 \text{ for each } i
+\;\Rightarrow\;
+\lim_{x\to c}\frac{\|r(x)\|}{\|x-c\|}=0.
+\]
+\end{proof}
+
+Some notations:
+\begin{itemize}
+\item $C^0(U,\mathbb{R}^m)$ is the space of continuous functions $f:U\to\mathbb{R}^m$.
+\item $C^1(U,\mathbb{R}^m)$ is the space of continuously differentiable functions $f:U\to\mathbb{R}^m$.
+\item $C^r(U,\mathbb{R}^m)$ is the space of $r$-times continuously differentiable functions $f:U\to\mathbb{R}^m$.
+\item $C^\infty(U,\mathbb{R}^m)$ is the space of smooth ($\infty$-times differentiable) functions $f:U\to\mathbb{R}^m$.
+\end{itemize}
+
+\newpage
 % =====================================================================
-
-
+\section{Day 11 (10.2) --- Higher Order Partial Derivatives}
 % ====================================================================
+\begin{theorem}{Equality of Mixed Partials}
+Let $U\subseteq\mathbb{R}^n$ be open and let $f\in C^2(U,\mathbb{R}^m)$, then for $i,j\in\{1,\cdots,n\}$:
+\[
+\frac{\partial^2 f}{\partial x_i\partial x_j}=\frac{\partial^2 f}{\partial x_j\partial x_i}
+\]
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
 
 
-\section{Day 8 --- }
+\newpage
 % =====================================================================
+\section{Day 12 (10.5) --- The Chain Rule}
+% =====================================================================
+\begin{theorem}{The Chain Rule}
+Let $U\subseteq\mathbb{R}^n$ and $V\subseteq\mathbb{R}^m$ be open, and let:
+\[
+f:U\to\mathbb{R}^m, \text{ }g:V\to\mathbb{R}^k, \text{ s.t. } f(U)\subseteq V.
+\]
+If $f$ is differentiable at $c$, and $g$ is differentiable at $f(c)$, then $g\circ f:U\to\mathbb{R}^k$ is differentiable at $c$, and we have:
+\[
+D(g\circ f)(c)=Dg(f(c))Df(c).
+\]
+\end{theorem}
 
+\begin{proof}
+We write:
+\[
+f(x)=f(c)+M(x-c)+r_f(x), \lim_{x\to c,x\ne c}\frac{r_f(x)}{\|x-c\|}=0,
+\]
+and that:
+\[
+g(y)=g(f(c)+N(y-f(c))+r_g(y), \lim_{y\to f(c),y\ne f(c)}\frac{r_g(y)}{\|y-f(c)\|}=0, 
+\]
+and that $M=Df(c), N=Dg(f(c))$.\\
+And we have that:
+\[
+\begin{aligned}
+g(f(x)) &= g(f(c)) + N(f(x)-f(c)) + r_g(f(x)) \\
+&= g(f(c)) + N(M(x-c)+r_f(x)) + r_g(f(x)) \\
+&= g(f(c)) + NM(x-c) + (Nr_f(x)+r_g(f(x))) \\
+&= g(f(c)) + NM(x-c) + r_{g\circ f}(x) \quad (*)
+\end{aligned}
+\]
+where $\displaystyle\frac{r_{g\circ f}(x)}{\|x-c\|}=\frac{Nr_f(x)}{\|x-c\|}=\frac{r_g(f(x))}{\|x-c\|}$.
+\\Let:
+\[
+\sigma_f(x)=\begin{cases}\frac{r_f(x)}{\|x-c\|},x\ne c\\0,x=c\end{cases}, \sigma_g(x)=\begin{cases}\frac{r_g(x)}{\|x-c\|},x\ne c\\0,x=c\end{cases}
+\]
+Then we have:
+\[
+\frac{r_{g\circ f}(x)}{\|x-c\|}=Nr_f(x)+\sigma_g(f(x))\frac{\|f(x)-f(c)\|}{\|x-c\|}.
+\]
+Since $f$ is continuous at $c$, we have $\displaystyle\lim_{x\to c}\sigma_f(x)=\sigma_f(c)=0$, and $\displaystyle\lim_{x\to c}\sigma_g(f(x))=\sigma_g(f(c))=0$, thus:
+\[
+\frac{\|f(x)-f(c)\|}{\|x-c\|}=\frac{\|M(x-c)+r_f(x)\|}{\|x-c\|}\le \left\|M\frac{x-c}{\|x-c\|}\right
+\|+\frac{\|r_f(x)\|}{\|x-c\|}
+\]
+But $\left\|M\frac{x-c}{\|x-c\|}\right\|\le\max\{\|Ma\|:\|a\|=1\}=c$, then we know that $\displaystyle\lim_{x\to c}\frac{r_{g\circ f}(x)}{\|x-c\|}=0$.
+Therefore, by $(*)$ we have that $D(g\circ f)(c)=NM.$
+\end{proof}
 
+\begin{proposition}
+Let $U\subseteq\mathbb{R}^n$ be open, let $f\in C^1(U)$ and $c\in U$, then $\nabla f(c)=(Df(c))^T$.\\
+(*Observation: $\nabla f(c)$ is orthogonal to the level set of $f$)\\
+More precisely, given any $\gamma:(a,b)\to\mathbb{R}^n$, $\gamma\in C^1(a,b)$, with $f(\gamma(t))$ is a constant, then for all $t\in (a,b)$, $\langle \nabla f(\gamma(t)),\gamma'(t)\rangle=0$.
+\end{proposition}
+
+\begin{proof}
+Take derivative of $f(\gamma(t))$ as a constant, then:
+\[
+Df(\gamma(t))D\gamma(t)=D_{f(\gamma(t))}(t)=0.
+\]
+Therefore we have $\langle\nabla f(\gamma(t)),\gamma'(t)\rangle=0$.
+\end{proof}
+
+\begin{proposition}[Leibniz Notation]
+Let $U\subseteq\mathbb{R}^n$ be open and given $f:U\to\mathbb{R}^n$, let $y=f(x)$, then we write $Df(x)$ as a matrix with entries $\displaystyle\frac{\partial x_i}{\partial y_j}.$ Given another function $z=g(y)$, then $z=g(f(x))$, and by the Chain Rule, we have:
+\[
+\frac{\partial z_i}{\partial x_k}=\sum_{j=1}^m\frac{\partial z_i}{\partial y_j}\frac{\partial y_j}{\partial x_k}
+\]
+\end{proposition}
+
+\begin{example}{}
+Consider $\frac{d}{dt}\int_0^te^{-ts^2}ds$, we write the funtion:
+\[
+g(x,y)=\int_0^xe^{-ys^2}ds,
+\]
+and we have to show $\frac{d}{dt}g(t,t)$, we have:
+\[
+\frac{d}{dt}g(t,t)=\frac{\partial g}{\partial x}\frac{\partial x}{\partial t}+\frac{\partial g}{\partial y}\frac{\partial y}{\partial t}=e^{-yx^2}-\int_0^xs^2e^{-yx^2}ds
+\]
+\end{example}
+
+\newpage
 % ====================================================================
-
-
-\section{Day 9 --- }
+\section{Day 13 (10.7) --- Applications of the Chain Rule}
 % =====================================================================
+We know the Chain Rule:
+\[
+D(g\circ f)(c)=Dg(f(c))Df(c)
+\]
+And the Leibniz notation: when $z=g(y),y=f(x)$, we have:
+\[
+\frac{\partial z_i}{\partial x_k}=\sum_{j=1}^n\frac{\partial z_i}{\partial y_j}\frac{\partial y_j}{\partial x_k}
+\]
+And there are some examples:
+\begin{example}{}
+Let $f:\mathbb{R}^2\to\mathbb{R}^3$ being represented by: 
+\[
+f(x_1,x_2)=(e^{x_1+x_2},x_1^2+x^2+1,\sin(x_1)+2x_1)
+\]
+And $g:\mathbb{R}^3\to\mathbb{R}^2$ being represented by:
+\[
+g(y_1,y_2,y_3)=(y_1+y_2y_3+\sin(y_3),y_1^2+y_2+y_3^2+1)
+\]
+And by the Chain Rule, we know that:
+\[
+D(g\circ f)(c)=Dg(f(c))Df(c),
+\]
+consider the point $c=\mathbf{0}$, we then have:
+\[
+Df(c)=\begin{pmatrix}\frac{\partial y_1}{\partial x_1}&\frac{\partial y_1}{\partial x_2}\\\frac{\partial y_2}{\partial x_1}&\frac{\partial y2}{\partial x_2}\\\frac{\partial y_3}{\partial x_1}&\frac{\partial y_3}{\partial x_2}\end{pmatrix}=\begin{pmatrix}1&1\\0&1\\3&0\end{pmatrix}.
+\]
+And $f(\mathbf{0})=(1,1,0)$, so that:
+\[
+Dg(c)=\begin{pmatrix}\frac{\partial z_1}{\partial y_1}&\frac{\partial z_1}{\partial y_2}&\frac{\partial z_1}{\partial y_3}\\\frac{\partial z_2}{\partial y_1}&\frac{\partial z_2}{\partial y_2}&\frac{\partial z_2}{\partial y_3}\end{pmatrix}=\begin{pmatrix}1&0&2\\2&1&0\end{pmatrix}.
+\]
+Therefore, we have:
+\[
+D(g\circ f)(c)=\begin{pmatrix}1&0&2\\2&1&0\end{pmatrix}\begin{pmatrix}1&1\\0&1\\3&0\end{pmatrix}=\begin{pmatrix}7&1\\2&3\end{pmatrix}.
+\]
+\end{example}
+
+\begin{example}{Applications On the Product Rule}
+Consider the value of $\frac{d}{dt}(fg)$, we let $x=f(t),y=g(t)$, then:
+\[
+\frac{d}{dt}(fg)=\frac{d}{dt}(xy)=\frac{\partial}{\partial x}(xy)\frac{dx}{dt}+\frac{\partial}{\partial y}(xy)\frac{dy}{dt}=g(t)\frac{df}{dt}+f(t)\frac{dg}{dt}.
+\]
+\end{example}
+
+\begin{proposition}
+Let $f:U\to\mathbb{R}^m$ be differentiable at $c\in U$ and let $a\in\mathbb{R}^n$. If $\gamma:(-\varepsilon,\varepsilon)\to U$ is differentiable, with $\gamma(0)=c,\gamma'(0)=a$, then:
+\[
+D_af(c)=\frac{d}{dt}_{t=0}f(\gamma(t)).
+\]
+\end{proposition}
+
+\begin{proof}
+$\frac{d}{dt}_{t=0}f(\gamma(t))=Df(\gamma(0))D\gamma(0)=Df(c)\cdot a\cdot\gamma'(0)=D_af(c).$
+\end{proof}
+
+\begin{example}{Application to Matrices}
+We know that $\operatorname{Mat}_{\mathbb{R}}(m\times n)\cong\mathbb{R}^{m\times n}$, and we consider the following functions:
+\begin{enumerate}
+\item $\operatorname{det}:\operatorname{Mat}_\mathbb{R}(n\times n)\to\mathbb{R}$
+\item $\operatorname{Mult}:\operatorname{Mat}_{\mathbb{R}}(n\times n)\times\operatorname{Mat}_{\mathbb{R}}(n\times n)\to\operatorname{Mat}_{\mathbb{R}}(n\times n)$
+\item $\operatorname{Inv}:\{A:\operatorname{det}(A)\ne 0\}\to\operatorname{Mat}_{\mathbb{R}}(n\times n)$
+\item $\operatorname{exp}:\operatorname{Mat}_{\mathbb{R}}(n\times n)\to\operatorname{Mat}_{\mathbb{R}}(n\times n)$
+\end{enumerate}
+We consider the derivatives:
+\begin{enumerate}
+\item WTS: $D\operatorname{Mult}(A_1,A_2)$.\\
+We first consider $A_1=A_2=I$, then:
+\[
+\begin{aligned}
+D\operatorname{Mult}(I,I)(B_1,B_2)&=
+\frac{d}{dt}_{t=0}\operatorname{Mult}(I+tB_1,I+tB_2)\\
+&=\frac{d}{dt}_{t=0}(I+t(B_1+B_2)+t^2B_1B_2)\\
+&=B_1+B_2
+\end{aligned}
+\]
+And in general:
+\[
+\begin{aligned}
+D\operatorname{Mult}(A_1,A_2)(B_1,B_2)
+&=\frac{d}{dt}_{t=0}\operatorname{Mult}(A_1+tB_1,A_2+tB_2)\\
+&=\frac{d}{dt}_{t=0}(A_1A_2+t(B_1A_2+A_1B_2)+t^2B_1B_2\\
+&=B_1A_2+A_1B_2
+\end{aligned}
+\]
+Then $D\operatorname{Mult}(A_1,A_2)$ is the linear map $\operatorname{Mat}(n\times n)\times\operatorname{Mat}(n\times n)\to\operatorname{Mat}(n\times n), (B_1,B_2)\rightarrow B_1A_2+A_1B_2$.
 
 
+\item WTS: $D\operatorname{Inv}(A)$.
+We consider that $\operatorname{Inv}(A)+A^{-1}$ defined on $U=\{A:\det(A)\ne 0\}$.
+Then, we have:
+\[
+\begin{aligned}
+D\operatorname{Inv}(A)(B)&=\frac{d}{dt}_{t=0}\operatorname{Inv}(A+tB)\\&=\frac{d}{dt}_{t=0}(A+tB)^{-1}\\&=-A^{-1}BA^{-1}
+\end{aligned}
+\]
+\end{enumerate}
+\end{example}
+\newpage
 % ====================================================================
-
-
-\section{Day 10 --- }
+\section{Day 14 (10.9) --- More Applications of the Chain Rule}
 % =====================================================================
+\begin{example}{Polar Coordinate}
+We let $\phi:\mathbb{R}^2\to\mathbb{R}^2$ and $(r,\theta)\to(r\cos\theta,r\sin\theta)$, so that every $(x,y)\in\mathbb{R}^2$ has preimage $(r,\theta)$ with $r\ge 0$, and $\theta$ determined up to the mutiples of $2\pi$. Given $u=f(x,y)$, then we have:
+\[
+\begin{aligned}
+\frac{\partial u}{\partial r}
+&=\frac{\partial u}{\partial x}\frac{\partial x}{\partial r}+\frac{\partial u}{\partial y}\frac{\partial y}{\partial r}\\
+&=\cos\theta\frac{\partial u}{\partial x}+\sin \theta\frac{\partial u}{\partial y}\\
+&=\frac{x}{r}\frac{\partial u}{\partial x}+\frac{y}{r}\frac{\partial u}{\partial y}
+\end{aligned}
+\]
+And similarly:
+\[
+\begin{aligned}
+\frac{\partial u}{\partial \theta}
+&=\frac{\partial u}{\partial x}\frac{\partial x}{\partial \theta}+\frac{\partial u}{\partial y}\frac{\partial y}{\partial \theta}\\
+&=-r\sin\theta\frac{\partial u}{\partial x}+r\cos \theta\frac{\partial u}{\partial y}\\
+&=-y\frac{\partial u}{\partial x}+x\frac{\partial u}{\partial y}
+\end{aligned}
+\]
+Then we have $\displaystyle e_r=(\cos\theta,\sin\theta)=\frac{1}{r}(x,y)$ and $\displaystyle e_\theta=(-\sin\theta,\cos\theta)=\frac{1}{r}(-y,x)$, thus:
+\[
+\frac{\partial u}{\partial r}=\langle\nabla u,e_r\rangle, \frac{\partial u}{\partial \theta}\langle\nabla u,e_\theta\rangle.
+\]
+Hence:
+\[
+\nabla u=\frac{\partial u}{\partial r}e_r+\frac{1}{r}\frac{\partial u}{\partial \theta}e_\theta
+\]
+\end{example}
 
+\begin{example}{Velocity Vectors of Differentiable Curves}
 
+Let $\gamma:\mathbb{R}\to\mathbb{R}^2$ be differentiable, and $\gamma(t)=(x(t),y(t))$, then $\gamma'(t)=(\frac{dx}{dt},\frac{dy}{dt})$, then we express it in polar coordinates by letting $\gamma(t)=\phi(r(t),\theta(t))$, then:
+\[
+\frac{dx}{dt}=\frac{\partial x}{\partial r}\frac{dr}{dt}+\frac{\partial x}{\partial \theta}{\frac{d\theta}{dt}}=\cos\theta\frac{dr}{dt}-r\sin\theta\frac{d\theta}{dt}
+\]
+Similarly:
+\[
+\frac{dy}{dt}=\sin\theta\frac{dr}{dt}+r\cos\theta\frac{d\theta}{dt}
+\]
+So $\gamma'(t)=(\frac{dx}{dt},\frac{dy}{dt})=\frac{dr}{dt}e_r+r\frac{d\theta}{dt}e_\theta$, and $\|\gamma'(t)\|=\sqrt{(\frac{dr}{dt})^2+r^2(\frac{dy}{dt})^2}$
+\end{example}
+
+Recall that $\operatorname{Mat}_\mathbb{R}(n\times n)=\mathbb{R}^{n^2}$, we have:
+\[
+U=\{A\mid\det(A)\ne 9\}\subseteq\operatorname{Mat}_\mathbb{R}(n\times n),
+\]
+and that $\operatorname{Inv}:U\to U\subseteq\operatorname{Mat}_\mathbb{R}(n\times n)$, with $D\operatorname{Inv}(A)(B)=-A^{-1}BA^{-1}$.
+\begin{example}{}
+Suppose $\gamma:\mathbb{R}\to U$, and $\gamma(t)=A(t)$, sd sts $\frac{d}{dt}A(t)^{-1}$ in terms of $\frac{dA}{dt}$.
+We have:
+\[
+0=\frac{d}{dt}(I)=\frac{d}{dt}(A(t)A(t)^{-1})=\frac{dA}{dt}A(t)^{-1}+A(t)\frac{d}{dt}A(t)^{-1}
+\]
+Thus:
+\[
+\frac{d}{dt}A(t)^{-1}=-A(t)^{-1}\frac{dA}{dt}A(t)^{-1}
+\]
+\end{example}
+Next we consider the exponential operator, where $\operatorname{exp}:\operatorname{Mat}_\mathbb{R}(n\times n)\to\operatorname{Mat}_\mathbb{R}(n\times n)$, with $A\to\sum_{n=0}^\infty\frac{1}{n!}A^n$, we have $\operatorname{exp}(A+B)=\operatorname{exp}(A)\operatorname{exp}(B)$ if $AB=BA$, so that:
+\[
+\frac{d}{dt}\operatorname{exp}(tA)=A\operatorname{exp}(tA)=\operatorname{exp}(tA)A,
+\]
+and that $D\operatorname{exp}(\mathbf{0})(B)=\frac{d}{dt}_{t=0}\operatorname{exp}(tB)=B$, so that $D\operatorname{exp}(\mathbf{0})$ is the identity map on $\operatorname{Mat}_\mathbb{R}(n\times n)$. More generally:
+\[
+D\operatorname{exp}(A)(B)=\frac{d}{dt}_{t=0}\operatorname{exp}(A+tB)
+\]
+Since $\operatorname{exp}(-A)\operatorname{exp}(A+tB)-I=\int_0^1\frac{d}{ds}(\operatorname{exp}(-sA)\operatorname{exp}(s(A+tB)))ds=\int_0^1$
+
+\newpage
 % ====================================================================
+\section{Day 15 (10.16) --- Approximation in $n$-Variables}
+%
+=====================================================================
+\begin{theorem}
+Let $U\subseteq\mathbb{R}$, and $f\in C^N(U)$, then, for $c\in U$:
+\begin{enumerate}
+\item There is an unique polynomial $p(x)$ of degree $\le N$ such that:
+\[
+f^{(j)}(c)=p^{(j)}(c),
+\]
+for $j\in\{0,\cdots,N\}.$\\
+It's given by the formula:
+\[
+p(c)=\sum_{j=0}^N\frac{f^{(j)}(c)}{j!}(x-c)^j.
+\]
+\item The remainder term $r(x)=f(x)-p(x)$ satisfies $\displaystyle\lim_{x\to c}\frac{r(x)}{(x-c)^N}=0.$
+\end{enumerate}
+\end{theorem}
 
+\begin{example}
+Suppose $f'(c)=0$, then:
+\begin{enumerate}
+\item If $f''(c)>0$, then $f$ has local main.
+\item If $f''(c)=0$, then $f$ could be either/neither.
+\end{enumerate}
+Consider the smallest $N>0$ such that $f^{(N)}(c)\ne 0$, then:
+\[
+f(x)=f(c)+\frac{f^{(N)}(c)}{N!}(x-c)^N+r(x).
+\]
+Hence, we have:
+\[
+\frac{f(x)-f(c)}{(x-c)^N}=\frac{f^N(c)}{N!}+\frac{r(x)}{(x-c)^N}
+\]
+And if $N$ is even, then this expression obtains its local minima or maxima depending on the sign of $f^{(N)}(c)$, and if $N$ is odd, then $f(x)-f(c)$ changes sign. The only case that this doesn't work is when all $f^{(j)}=0$.
+\end{example}
 
-\section{Day 11 --- }
-% =====================================================================
+\begin{definition}{Polynomial of degree $N$}
+Let $x_1,\cdots,x_n\in\mathbb{R}^n$, then a function:
+\[
+p(x_1,\cdots,x_n)=\sum a_{\alpha_1,\cdots,\alpha_n}x_1^{\alpha_1},\cdots,x_n^{\alpha_n}
+\]
+is a polynomial of degree $N$, and the sum is $(\alpha_1,\cdots,\alpha_n)$ where $\alpha_i\in\mathbb{Z}_{\ge 0}$ and $\alpha_1+\cdots+\alpha_N\le N$.\\
+And the coefficients are recovered using partial derivatives, where:
+\[
+\frac{\partial\beta_1}{\partial x_1^{\beta_1}}\cdots\frac{\partial \beta_n}{\partial x_n^{\beta_n}}(x_1^{\alpha_1}\cdots x_n^{\alpha_n})=\begin{cases}0, \text{ if }(\beta_1,\cdots,\beta_n)\ne(\alpha_1,\cdots,\alpha_n)\\\alpha_1!\alpha_2!\cdots\alpha_n!,\text{ if }(\beta_1,\cdots,\beta_n)=(\alpha_1,\cdots,\alpha_n)\end{cases}
+\]
+\end{definition}
 
+\begin{definition}{Multi-Index Notation}
+$x=(x_1,\cdots,x_n)$, where $x_i\in\mathbb{R}$.\\
+$\alpha=(\alpha_1,\cdots,\alpha_n)$, $\alpha_i\in\mathbb{Z_{\ge 0}}$.\\
+$|\alpha|=\alpha_1+\cdots+\alpha_n$\\
+$x^\alpha=x_1^{\alpha_1},...,x_n^{\alpha_n}$\\
+$\frac{\partial|\alpha|}{\partial x^\alpha}=\frac{\partial\alpha_1}{\partial x_1^{\alpha_1}},\cdots,\frac{\partial\alpha_n}{\partial x_n^{\alpha_n}}$\\
+$f^{(\alpha)}=\frac{\partial |\alpha|}{\partial x^\alpha}f$.
+\end{definition}
 
+So, we write:
+\[
+p(x)=\sum_{|\alpha|\le N}a_\alpha x^\alpha,~\frac{\partial |\beta|}{\partial x^\beta}x^\alpha=\begin{cases}0,\text{ if }\beta\ne\alpha\\\alpha!,\text{ if } \beta=\alpha\end{cases}
+\]
+And the coefficient of $p(x)$ is:
+\[
+a_\alpha=\frac{1}{\alpha!}\frac{\partial|\alpha|}{\partial x^\alpha}p(x)
+\]
+
+\begin{theorem}{Taylor Theorem}
+Let $U\subseteq\mathbb{R}^n, f\in C^N(U)$, then for $c\in U$:
+\begin{enumerate}
+\item There is an unique polynomial $p(x)$ of degree $\le N$ such that:
+\[
+f^{(\alpha)}(c)=p^{(\alpha)}(c),~|\alpha|\le N.
+\]
+It's given by the formula:
+\[
+p(x)=\sum_{|\alpha|\le N}\frac{f^{(\alpha)}(c)}{\alpha!}(x-c)^\alpha.
+\]
+\item The remainder $r(x)=f(x)-p(x)$ satisfies $\lim_{x\to c}\frac{r(x)}{\|x-c\|^N}=0$.
+\end{enumerate}
+\end{theorem}
+
+Then, we'll discurss the critical points of the function $f:U\to\mathbb{R}$, i.e., whem $\nabla f(c)=0$, we consider the higher order derivatives, e.g. $\frac{\partial^2 f}{\partial x_i\partial y_j}(c)$.
+
+\newpage
 % ====================================================================
-
-
-\section{Day 12 --- }
+\section{Day 16 (10.19) --- Taylor Theorem in Several Variables}
 % =====================================================================
+\begin{lemma}{}
+Supposer that $r\in C^N(U)$, with $r^{(\alpha)}(c)=0$ for all $|\alpha|\le N$. Then:
+\[
+\lim_{x\to c}\frac{r(x)}{\|x-c\|^N}=0.
+\]
+\end{lemma}
 
+\begin{proof}
+We have to show:
+\[
+\forall \varepsilon>0, \exists \delta>0, \forall y\in U, \|y-c\|>\delta\Rightarrow |r(x)|\le\varepsilon\|x-c\|^N.
+\]
+We want to use the Mean Value Theorem. Given $x\in U$, consider:
+\[
+\phi(t)=r((1-t)c+tx_, ~t\in[0,1].
+\]
+By the Mean Value Theore, there exists $t'\in[0,1]$ such that $\phi(1)-\phi(0)=\phi'(t')$.\\
+Put $y'=(1-t')c+t'x$, then:
+\[
+\phi(1)=r(x),\phi(0)=r(c),\phi(t')=r(y').
+\]
+Therefore:
+\[
+\begin{aligned}
+r(x)&=\phi(1)-\phi(0)=\phi'(t')\\
+&=\sum_{j=1}^n\frac{\partial r}{\partial x_j}y'(x_j-c_j)\\
+\end{aligned}
+\]
+Hence:
+\[
+\begin{aligned}
+|r(x)|&\le\sum_{j=1}^n\left|\frac{\partial r}{\partial x_j}(y')\right||x_j-c_j|\\
+&\le \|x-c\|\sum_{j=1}^n\left|\frac{\partial r}{\partial x_j}(y')\right|.
+\end{aligned}
+\]
+Let $\varepsilon>0$ be given, the by induction, we assume that the statement is true for $N-1$. For $N\ge 1$, we apply to $\displaystyle\frac{\partial r}{\partial x_j}\in C^{N-1}(U)$. Hence, there exists $\delta>0$ such that:
+\[
+\|y-c\|<\delta\Rightarrow\left|\frac{\partial r}{\partial x_j}(y)\right|\le\frac{\varepsilon}{n}\|y-c\|^{N-1}.
+\]
+Then :
+\[
+|r(y)|\le\|y-c\|\sum_{j=1}^n\frac{\varepsilon}{n}\|y-c\|^{N-1}=\varepsilon\|y-c\|^N.
+\]
+\end{proof}
+\newpage
+\begin{example}{}
+WTS the Taylor Polynomial of degree 4 of the function $\displaystyle f(x)=\frac{1}{1+x^2+y^3}.$\\
+Since $\frac{1}{1-t}=\sum_{i=0}^\infty t^i$, we have:
+\[
+\begin{aligned}
+f(x)&=\frac{1}{1+x^2+y^3}=\frac{1}{1-(-x^2-y^3)}\\
+&=\sum_{i=0}^\infty(-x^2-y^3)^i\\
+&=1-x^2-y^3+x^4+...
+\end{aligned}
+\]
+\end{example}
 
+\begin{example}{}
+WTS the Taylor Polynomial of the function $f(x,y)=\frac{1}{x^2+y^3}$ at $c=(1,0)$.
+We write $x=1+u$, then:
+\[
+\begin{aligned}
+f(x,y)&=\frac{1}{(1+u)^2+y^2}=\frac{1}{1+(u^2+2u+y^2)}\\
+&=\frac{1}{1-(-u^2-2u-y^2)}\\
+&=\sum_{i=0}^\infty (-u^2-2u-y^2)^i\\
+&=\sum_{i=0}^\infty[-(x-1)^2-2(x-1)-y^2]^i\\
+&=1-2(x-1)+3(x-1)^2-4(x-1)^3-y^3
+\end{aligned}
+\]
+\end{example}
+
+Then we apply the Taylor Theorem to the critical point behavior of a function, where we know that if $f\in C^1(U)$ has the local extrema at $c\in U$, then $\nabla f(c)=0$. If $f\in C^2(U)$, then:
+\[
+f(x)=f(c)+\sum_{j=1}^n \frac{\partial f_i}{\partial x_j}(c)(x_j-c_j)+\frac{1}{2}\sum_{i=1}^n \frac{\partial^2 f}{\partial x_i}(x_i-c_i)+r(x).
+\]
+The for $n=2$, we have:
+\[
+f(x,y)=f(r.s)+\frac{1}{2}\frac{\partial^2 f}{\partial x^2}(r,s)(x-r)^2+\frac{\partial^2 f}{\partial x\partial y}(c)(x-r)(y-s)+\frac{1}{2}\frac{\partial^2 f}{\partial y^2}(r,s)(y-s)^2+...
+\]
+General case:
+\[
+f(x)=f(c)+\sum_{i=1}^n\frac{\partial f}{\partial x_i}(c)(x_i-c_i)+\frac{1}{2}\sum_{i,j=1}^n\frac{\partial^2 f}{\partial x_i\partial y_j}(c)(x_i-c_i)(x_j-c_j),
+\]
+\begin{definition}{Hessian}
+Suppose $U\subseteq\mathbb{R}^n$, $c\in U$, and $\nabla f(c)=0$, then the Hessian of $f$ at $c$ is the matrix:
+\[
+H_y=\frac{\partial^2 f}{\partial x_i\partial y_j}(c).
+\]
+\end{definition}
+
+In this case:
+\[
+f(x)=f(c)+
+\frac{1}{2}\sum_{i,j=1}^nH_y(x_i-c_i)(x_j-c_j)+r(x).
+\]
+Using the inner product notation:
+\[
+f(x)=f(c)+\frac{1}{2}\langle H(x-c),(x-c)\rangle+r(x).
+\]
+Thus, we obtain a lemma:
+\begin{lemma}{}
+If $H$ is positive definite, then $\langle  H(x-c),(x-c)\rangle>0$ for $x-c=0$, which means that $f$ attains its local minima at $c$. Similarly, if $H$ is negative definite, then $f$ attains its local maxima at $c$, and otherwise $f$ is at its saddle point at $c$.
+\end{lemma}
+
+\newpage
 % ====================================================================
-
-
-\section{Day 13 --- }
+\section{Day 17 (10.21) --- Critical Point Analysis I}
 % =====================================================================
+\begin{proposition}[Necessary Conditions For Local Extrema]
+Let $U\subseteq\mathbb{R}^n$ be open, and let $f\in C^1(U)$. If $f$ has a local maxima or local minima at $c\in U$, then:
+\[
+\frac{\partial f}{\partial x_j}(c)=0,~j\in\{1,\cdots,n\}.
+\]
+Equivalently, $Df(c)=0$, i,e, $\nabla f(c)=0$.
+\end{proposition}
+
+\begin{proof}
+If $f$ has a local extrema at $c$, then each of the functions:
+\[
+t\mapsto f(c+te_j),
+\]
+has a local extrema at $t=0$, then the $t$-derivative of this function must vanish at $t=0$, and this means:
+\[
+\frac{\partial f}{\partial x_j}(c)=0.
+\]
+\end{proof}
+
+\begin{proposition}
+Let $A\in\operatorname{Mat_\mathbb{R}}(n\times n)$ be a real symmetric matrix of size $n$, then:
+\begin{enumerate}
+\item There is an orthonormal basis $v_1,\cdots,v_n\in\mathbb{R}^n$ consisting of eigenvectors of $A$, thus:
+\[
+Av_i=\lambda_iv_i,
+\]
+where $\lambda_i\in\mathbb{R}$ are the eigenvalues, and:
+\[
+\langle v_i,v_j\rangle=\delta_{ij}=\begin{cases}1,i=j\\0,i\ne j\end{cases}.
+\]
+In particular, $A$ has $n$ real eigenvalues $\lambda_i$.
+
+\item Let $S$ be the orthogonal matrix having $v_1,\cdots,v_n$ as its columns, we have that:
+\[
+A=SDS^\top,
+\]
+where $D$ is the diagonal matrix.
+
+\item Let $q_A(x)=\langle Ax,x\rangle$ be the quadratic form of defined by $A$ on $x$, then use the orthonormal bases $v_1,\cdots,v_n$ to write:
+\[
+x=\sum_{i=1}^ny_iv_i,
+\]
+and we write $x=Sy$, then $Ax=\sum_{i=1}^n\lambda_iy_iv_i$, then:
+\[
+q_A(x)=\sum_{i=1}^n \lambda_iy_i^2
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}{}
+The maxima (resp. minima) of the restriction of $q_A$ to the unit sphere:
+\[
+\{x:\|x\|=1\},
+\]
+is the largest eigenvalue (resp. smallest eigenvalue) of $A$. The corresponding $x$ is a normalized eigenvector for that eigenvalue.
+\end{theorem}
+
+\begin{proof}
+Since $S$ is an orthogonal matrix, we have:
+\[
+\|x\|^2=\|Sy\|^2=\|y\|^2=\sum_iy_i^2.
+\]
+We write $t_i=y_i^2\ge 0$, then $\|y\|=1$ means $\sum t_i=1$. Hence, the maxima of 
+\[
+\sum_{i=1}^n\lambda_it_i,
+\]is obtained by taking $t_i=1$ for the largest eigenvalue and $t_i=0$ for all other eigenvalues. \\
+Conversely, if $\langle Ax,x\rangle$ equals to the largest eigenvalue, then $x$ must be a linear combination of eigenvectors for that eigenvalue, for otherwise the sum 
+\[
+\sum_{i=1}^ny_i^2\lambda_i,
+\] would be smaller than the largest eigenvalue. The minima proof is similar.
+\end{proof}
+
+\begin{definition}{Positive Definite Matrix}
+A matrix $A\in\operatorname{Mat}_\mathbb{R}(n\times n)$ is called positive definite if the quadratic forms for all $x\ne 0$ satisfy:
+\[
+q_A(x)>0.
+\]
+\end{definition}
+
+\begin{definition}{Negative Definite Matrix}
+A matrix $A\in\operatorname{Mat}_\mathbb{R}(n\times n)$ is called negative definite if the quadratic forms for all $x\ne 0$ satisfy:
+\[
+q_A(x)<0.
+\]
+\end{definition}
+
+\begin{corollary}
+A symmetric matrix $A$ is positive definite if all of its eigenvalues are greater than 0, and negative definite if all of its eigenvalues are smaller than 0.
+\end{corollary}
+
+\begin{proposition}[Level Sets]
+For $n=2$, we obtain the level sets:
+\[
+q_A^{-1}(\mu)=\{x:q_A(x)=\mu\}.
+\]
+If both eigenvalues are positive, the level sets for $\mu>0$ are ellipses, the level sets for $\mu<0$ are empty and $q_A^{-1}(0)=0$. The conditions for the negative eigenvalues are reversed. \\
+And if there are both positive and negative eigenvalues, the non-zero level sets are hyperbolas, while $q_A^{-1}(0)$ consists of two intersecting lines.\\
+And if the eigenvalues are all zero, then the quadratic form does not depend on the corresponding coordinate.
+\end{proposition}
+
+\begin{proposition}[Sufficient Conditions For Local Extrema]
+Let $f\in C^2(U)$, and $c\in U$. If $\nabla f(c)=0$, and $Hf(c)$ is positive definite (resp. negative definite), then $f$ has a local minima (resp. maxima) at $c$.
+\end{proposition}
 
 
+\newpage
 % ====================================================================
-
-
-\section{Day 14 --- }
+\section{Day 18 (10.23) --- Critical Point Analysis II}
 % =====================================================================
+\begin{proposition}
+Let $U\subseteq\mathbb{R}^n$ be an open set, and let $f:U\to \mathbb{R}$ be a function. Let $c\in U$. Then:
+\[
+f(x)=f(c)+\nabla f(c)(x-c)+\frac{1}{2}Hf(c)(x-c)^2+r(x).
+\]
+\end{proposition}
 
+And the necessary condition for a critical point is $\nabla f(c)=0$, in this condition, we have:
+\[
+f(x)\approx f(c)+\frac{1}{2}Hf(c)(x-c)^2,
+\]
+where $Hf(c)=\frac{\partial^2 f}{\partial x_j\partial x_j}(c)$.
+If $Hf(c)$ is positive definite, then $f$ attains its local minima at $c$, and the level sets are ellipses, thus:
+\[
+\frac{1}{2}yHf(c)(y)=\frac{1}{2}(\lambda_1y_1^2+\lambda_2y_2^2),
+\]
+with eigenvalues $\lambda_1,\lambda_2>0$.
 
+There, let the two eigenvectors of $Hf(c)$ be $v_1,v_2$ respectively, then $\lambda_1>\lambda_2>0$ means $f$'s level sets has longer axis on the direction of eigenvector $v_1$.
+
+Let $W_+\subseteq\mathbb{R}^n$ be the sum of eigenspace for positive eigenvalues of $Hf(c)$, and $W_-$ be the sum of eigenspace for negative eigenvalues of $Hf(c)$, then $\mathbb{R}^n=W_+\oplus W_-$.
+
+Then $q_H(y)=\langle Hy,y\rangle$ is positive definite on $W_+$ and negative definite on $W_-$. So, restriction to $W_+$ has local minima, and restriction to $W_-$ has local maxima.
+
+\begin{example}{}
+Let $f(x,y)=x^3+y^3-3xy$, then:
+\[
+\nabla f(x,y)=\begin{pmatrix}3x^2-3y\\3y^2-3x\end{pmatrix},~Hf(x,y)=\begin{pmatrix}6x&-3\\-3&6y\end{pmatrix}.
+\]
+Therefore, let $\nabla f(c)=0$, then $c=(0,0)$ or $(1,1)$.\\
+At $c=(0,0)$, 
+\[
+Hf(x,y)=\begin{pmatrix}0&-3\\-3&0\end{pmatrix},
+\] 
+and $\lambda_1=3,v_1=\begin{pmatrix}1\\-1\end{pmatrix}, \lambda_2=-3,v_2=\begin{pmatrix}1\\1\end{pmatrix}$. \\
+Hence, $(0,0)$ is a saddle point, with hyperbolic level sets, and $f(x,y)\approx -3xy.$\\
+At $c=(1,1)$, 
+\[
+Hf(x,y)=\begin{pmatrix}6&-3\\-3&6\end{pmatrix},
+\]
+and $\lambda_1=9, v_1=\begin{pmatrix}1\\-1\end{pmatrix},\lambda_2=3,\begin{pmatrix}1\\1\end{pmatrix}$.\\
+Hence, $(0,0)$ is a local minima, with elliptic level sets, and $f(x,y)\approx2-3xy.$
+\end{example}
+
+\newpage
 % ====================================================================
-
-
-\section{Day 15 --- }
+\section{Day 19 (11.2) --- Inverse Function Theorem}
 % =====================================================================
+Inverse function theorem is about "coordinate changes", for example: the polar coordinate
+\[
+x=r\cos\theta,y=r\sin\theta
+\]
+can be represented by the map $f:\mathbb{R}^2\to\mathbb{R}^2$, $(r,\theta)\mapsto (r\cos\theta,r\sin\theta)$. \\
+On $\mathbb{R}^2\backslash\{(0,0)\}$, we can locally invert this map, eg. solve for $r,\theta$ ($r=\sqrt{x^2+y^2}$), but what about the more general coordinate changes?
 
+We consider $(u_1\cdots,u_n)=\phi(x_1,\cdots,x_n)$, where $\phi:U\to\mathbb{R}^n$ and $c\in U$. We want to solve for $(x_1,\cdots,x_n)$ to make $(x_1,\cdots,x_n)=\psi(u_1,\cdots,u_n)$, thus we want to find an open neighborhood $V$ of $\phi(c)$ and $\psi:V\to\mathbb{R}^n$ such that:
+\[
+\phi\circ\psi=\operatorname{id}_V.
+\]
+By Chain Rule, if $\phi\in C^1(U,\mathbb{R}^n)$, we expect $\psi\in C^1(V,\mathbb{R}^n)$ to get:
+\[
+D_c\phi D_{\phi(c)}\psi=I.
+\]
+Thus, the necessary condition is $D\phi (c)$ being invertible.
 
+\begin{theorem}{Inverse Function Theorem}
+Suppose $f\in C^k(U,\mathbb{R}^n)$ with $k\ge 1$. Let $c\in U$ and $Df(c)$ be invertible, then there exists open neighborhoods $U_1,V_1$ of $c$ and $f(c)$ such that:
+\[
+c\in U_1\subseteq U, ~f(c)\in V_1\subseteq\mathbb{R}^n,
+\]
+and there exists an inverse function of $f$: 
+\[
+g\in C^k(V,\mathbb{R}^n),
+\]
+such that $f(U_1)=V_1, ~g(V_1)=U_1$, and $f\circ g=\operatorname{id}_{V_1}, ~g\circ f=\operatorname{id}_{U_1}$.
+\end{theorem}
+
+\begin{lemma}
+Suppose $h\in C^1(U,\mathbb{R}^m)$ with $h(0)=0$ and $Dh(0)=0$, then for every $\delta>0$, there exists $r>0$ such that for all $x,y\in \overline {B_r(0)}$, we have:
+\[
+\|h(x)-h(y)\|\le \delta\|x-y\|.
+\]
+\end{lemma}
+
+\begin{proof}
+We WTS that there exists $r>0$ such that for all $x\in \overline{B_r(0)}$, 
+\[
+\|Dh(x)v\|\le\delta\|v\|
+\]
+for all $v\in\mathbb{R}^n$, where $\displaystyle v=\sum_{i=1}^nv_ie_i$, with standard basis $e_1,\cdots,e_n$. Then:
+\[
+\|Dh(x)v\|=\left\|\sum_{i=1}^n v_i [Dh(x)e_i]\right\|\le\sum_{i=1}^n|v_i|\|Dh(x)e_i\|\le\|v\|\sum_{i=1}^n\|Dh(x)e_i\|.
+\]
+But $x\mapsto \|Dh(x)e_i\|$ is continuous, vanishes at 0, hence there exists $r>0$ such that $\displaystyle\|x\|\le r\Rightarrow \|Dh(x)e_i\|<\frac{\delta}{n}$. Thus:
+\[
+\|Dh(x)v\|\le \delta\|v\|.
+\]
+\end{proof}
+
+\begin{proof}[Proof of Inverse Function Theorem]
+We assume that $c=0$ and $f(0)=0$, then:
+\[
+f(x)=f(0)+Df(0)+r(x)=Df(0)+r(x).
+\]
+We let $Df(0)+A$, and replace $f$ with $\tilde f=f\circ A^{-1}$, $y\mapsto f(A^{-1}y)$, then:
+\[
+D\tilde f(0)=Df(0)\circ A^{-1}=I.
+\]
+Using this, we may also assume that $Df(0)=I$, then by the Lemma, $f(x)=x+h(x)$.
+
+$\mathbf{Step\text{ }1: Local\text{ } Injectivity} \text{ }-$ WTS there exists $r>0$ such that for all $x,y\in\overline{B_r(0)},~x\ne y\Rightarrow f(x)\ne f(y).$ We use the Lemma with $\displaystyle\delta=\frac{1}{2}$, and take $r>0$, then:
+\[
+\begin{aligned}
+\|f(x)-f(y)\|&=\|x-y+h(x)-h(y)\|\\
+&=\|x-y\|-\|h(x)-h(y)\|\\
+&=\frac{1}{2}\|x-y\|.
+\end{aligned}
+\]
+And in particular, $x\ne y\Rightarrow f(x)\ne f(y)$.\\
+We take $y=x+tv$, and let $t\to 0$, then:
+\[
+\frac{\|f(x)-f(x+tv)\|}{\|tv\|}\ge \frac{1}{2}\Rightarrow\frac{\|Df(x)v\|}{\|v\|}\ge \frac{1}{2}.
+\]
+Hence, we obtain:
+\[
+\|Df(x)v\|\ge \frac{1}{2}\|v\|,~\forall v\in\mathbb{R}^n.
+\]
+Hence, $Df(x)$ is invertible for all $x\in B_r(0)$.
+
+$\mathbf{Step\text{ }2: Local\text{ }Surjectivity\text{ }-}$ WTS $f(B_r(0))\supseteq B_{\frac{r}{4}}(0)$, we let $y_0\in B_{\frac{r}{4}}(0)$ and consider the function $\varphi:\overline{B_r(0)}\to\mathbb{R}$, where $\varphi(x)=\|f(x)-y_0\|^2$. Since $\overline{B_r(0)}$ is compact, by Extreme Value Theorem, $\varphi(x)$ takes a minima. Thus for $\|x\|=r$, we have:
+\[
+\|f(x)-y_0\|\ge \|f(x)\|-\|y_0\|\ge \frac{r}{2}-\|y_0\|>\frac{r}{4}>\|y_0\|,
+\]
+which gives that the minima of $\varphi$ is not on the boundary, so the minima is in the interior, so we use the criteria for local minima, we have that if $\varphi$ takes on a local minima at $x_0$, then:
+\[
+\begin{aligned}
+0=D\varphi(x_0)v&=\left.\frac{d}{dt}\right |_{t=0}\varphi(x_0+tv)\\
+&=\left.\frac{d}{dt}\right |_{t=0}\langle f(x_0+tv)-y_0,f(x_0+tv)-y_0\rangle\\
+&=2\langle Df(x_0)v,f(x_0)-y_0\rangle
+\end{aligned}
+\]
+Since $Df(x_0)$ is invertible, we have that $f(x_0)=y_0$.
+\end{proof}
+\newpage
 % ====================================================================
-
-
-\section{Day 16 --- }
+\section{Day 20 (11.4) --- Inverse Function Theorem and Diffeomorphisms}
 % =====================================================================
+\begin{proof}[Proof of Inverse Function Theorem (continued)]
+We continue to proof the theorem.\\
 
+$\mathbf{Step\text{ }3: Differentiability\text{ }of\text{ }the\text{ }Inverse} \text{ }-$
+Let $V_1=B_{\frac{r}{4}}(0)$ and $U_1=f^{-1}(V_1)\cap B_r(0)$. Since $f$ is a bijection on the restricted domain, we let $g:V_1\to U_1$ be the inverse, then we have:
+\[
+\|g(w)-g(z)\|\le 2\|w-z\|,
+\]
+in particular, $g$ is continuous. Then we want to show that $g$ is differentiable at the point $y_0=f(x_0)\in V_1$. By definition of the derivative of $f$:
+\[
+f(x)=f(x_0)+Df(x_0)(x-x_0)+r(x),~\lim_{x\to x_0}\frac{r(x)}{\|x-x_0\|}=0.
+\]
+In terms of $y=f(x)$ and $y_0=f(x_0)$, this says:
+\[
+y=y_0+Df(x_0)(g(y)-g(y_0))+r(g(y)),
+\]
+which we can solve for $g(y)$ using invertibility of $Df(x_0)$:
+\[
+g(y)=g(y_0)+(Df(x_0))^{-1}(y-y_0)-(Df(x_0))^{-1}r(g(y)).
+\]
+Then we have:
+\[
+\frac{\|r(g(y))\|}{\|y-y_0\|}\le 2\frac{\|r(g(y))\|}{\|g(y)-g(y_0)\|},
+\]
+and by continuity of $g$:
+\[
+\lim_{y\to y_0}\frac{\|r(g(y))\|}{\|g(y)-g(y_0)\|}=\lim_{x\to x_0}\frac{\|r(x)\|}{\|x-x_0\|}=0,
+\]
+so also $\displaystyle\lim_{y\to y_0}\frac{\|r(g(y))\|}{\|y-y_0\|}=0$. Hence, $g$ is differentiable at $y_0$, which gives:
+\[
+Dg(y_0)=(Df(g(y_0)))^{-1}.
+\]
 
+$\mathbf{Step\text{ }4:Regularity\text{ }--}$ Suppose that $f$ is of class $C^k$, WTS $g$ is of class $C^k$. On $V_1$ we have:
+\[
+Dg=(Df\circ g)^{-1},
+\]
+which means that:
+\[
+Dg=\operatorname{Inv}\circ Df\circ g,
+\]
+where $g:V_1\to U_1\subseteq\mathbb{R}^n$, and $Df:U_1\to\operatorname{Mat_\mathbb{R}}(n\times n)^\times$, where we denote $\operatorname{Mat_\mathbb{R}}(n\times n)^\times$ the open subset of matrices $A$ with $det(A)\ne 0$, and matrix inversion:
+\[
+\operatorname{Inv}:\operatorname{Mat_\mathbb{R}}(n\times n)^\times\to \operatorname{Mat_\mathbb{R}}(n\times n)^\times,~A\mapsto A^{-1}.
+\]
+The map $\operatorname{Inv}$ is of class $C^\infty$, and $Df$ is of class $C^{k-1}$, and $f$ is of class $C^k$. Therefore, $g$ is of class $C^j$ for any $j\le k-1$, then $Dg$ is of class $C^j$, so $g$ is of class $C^{j+1}$. Since $g$ is continuous, we then obtain inductively that $g$ is of class $C^k$. Thus we finish the proof of Inverse Function Theorem.
+\end{proof}
+
+\begin{definition}{$C^k$-Diffeomorphism}
+Let $U\subseteq\mathbb{R}^n$ be open, and $f:U\to\mathbb{R}^n$ be a function of class $C^k$. Then $f$ is called a $C^k$-diffeomorphism onto an open subset $V\subseteq\mathbb{R}^n$ if it admits a $C^k$ inverse $g:V\to \mathbb{R}^n$, that: 
+\[
+f\circ g=\operatorname{id}_V,~g\circ f=\operatorname{id}_U.
+\]
+\end{definition}
+
+\begin{definition}{Local $C^k$-Diffeomorphism}
+Let $U\subseteq\mathbb{R}^n$ be open, and $f:U\to\mathbb{R}^n$ be a function of class $C^k$. Then $f$ is called a local $C^k$-diffeomorphism if for all $c\in U$, there are open neighborhoods 
+\[
+U_1\subseteq U\ni c,~V_1\subseteq\mathbb{R}^n\ni f(c),
+\]
+such that $f|_{U_1}:U_1\to V_1$ is a $C^k$-diffeomorphism.
+\end{definition}
+
+\begin{corollary}
+A map $f:U\to\mathbb{R}^n$ is a local diffeomorphism if and only if the Jacobian matrix $Df(x)$ is invertible for all $x\in U$.
+\end{corollary}
+
+\begin{example}{Polar Coordinate}
+Consider the map:
+\[
+\phi:\{(r,\theta)\mid r>0\}\to\mathbb{R}^2,~(r,\theta)\mapsto(r\cos\theta,r\sin\theta),
+\]
+then:
+\[
+D\phi(r,\theta)=\begin{pmatrix}\cos\theta&-r\sin\theta\\\sin\theta&r\cos\theta\end{pmatrix},~\det D\phi(r,\theta)=r>0.
+\]
+Hence, $\phi$ is a local diffeomorphism.
+\end{example}
+
+\begin{lemma}[Morse Lemma]
+Let $f\in C^\infty(U)$ be a smooth function with a critical point at $c\in U$, thus $\nabla f(c)=0$. Suppose also that the Hessian $H(c)$ is nondegenerate, with $r$ positive eigenvalues and $n-r$ negative eigenvalues, then there exists a $C^\infty$ coordinate change $\phi:U_1\to V_1$ on an open neighborhood $U_1$ of $c$, with $\phi(c)=0$, such that the resulting function $\tilde f=f\circ \phi^{-1}$ is of the form:
+\[
+\tilde f(y)=f(c)+y_1^2+\cdots+y_r^2-y_{r+1}^2-\cdots-y_n^2.
+\]
+\end{lemma}
+\newpage
 % ====================================================================
+\section{Day 21 (11.6) --- Implicit Function Theorem}
 
-
-\section{Day 17 --- }
-% =====================================================================
-
-
+\newpage
 % ====================================================================
+\section{Day 22 (11.9) --- Rank Theorem}
 
-
-\section{Day 18 --- }
 % =====================================================================
-
-
 % ====================================================================
 \section*{Notes \& Questions}
 \addcontentsline{toc}{section}{Notes \& Questions}
