@@ -32,6 +32,7 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{titlesec}
+\usepackage{nicematrix}
 \usepackage{fancyhdr}
 \usepackage{tikz}
 \usepackage{framed}
@@ -1776,7 +1777,7 @@ Since $Df(x_0)$ is invertible, we have that $f(x_0)=y_0$.
 \end{proof}
 \newpage
 % ====================================================================
-\section{Day 20 (11.4) --- Inverse Function Theorem, Diffeomorphism and Morse Lemma}
+\section{Day 20 (11.4) --- Inverse Function Theorem and Diffeomorphisms}
 % =====================================================================
 \begin{proof}[Proof of Inverse Function Theorem (continued)]
 We continue to proof the theorem.\\
@@ -1856,16 +1857,95 @@ D\phi(r,\theta)=\begin{pmatrix}\cos\theta&-r\sin\theta\\\sin\theta&r\cos\theta\e
 \]
 Hence, $\phi$ is a local diffeomorphism.
 \end{example}
-
-\begin{lemma}[Morse Lemma]
-Let $f\in C^\infty(U)$ be a smooth function with a critical point at $c\in U$, thus $\nabla f(c)=0$. Suppose also that the Hessian $H(c)$ is nondegenerate, with $r$ positive eigenvalues and $n-r$ negative eigenvalues, then there exists a $C^\infty$ coordinate change $\phi:U_1\to V_1$ on an open neighborhood $U_1$ of $c$, with $\phi(c)=0$, such that the resulting function $\tilde f=f\circ \phi^{-1}$ is of the form:
-\[
-\tilde f(y)=f(c)+y_1^2+\cdots+y_r^2-y_{r+1}^2-\cdots-y_n^2.
-\]
-\end{lemma}
 \newpage
 % ====================================================================
-\section{Day 21 (11.6) --- Implicit Function Theorem}
+\section{Day 21 (11.6) --- Morse Lemma and Implicit Function Theorem}
+\begin{lemma}[Morse Lemma]
+Let $f\in C^\infty(U)$ be a smooth function with a critical point at $c\in U$, thus $\nabla f(c)=0$. Suppose also that the Hessian $H(c)$ is nondegenerate, with $r$ positive eigenvalues and $n-r$ negative eigenvalues, then there exists a $C^\infty$ coordinate change 
+\[
+\phi:U_1\to V_1
+\]
+on an open neighborhood $U_1$ of $c$, with $\phi(c)=0$, such that the resulting function 
+\[
+\tilde f=f\circ \phi^{-1}
+\]
+is of the form:
+\[
+\tilde f(y)=f(c)+\sum_{i=1}^ry_i^2-\sum_{i=r+1}^ny_i^2.
+\]
+\end{lemma}
+
+\begin{example}{}
+For a function that the Hessian is positive definite, we have:
+\[
+\tilde f(u)=f(c)+\sum_{i=1}^nu_i^2,
+\]
+and the level sets are circles.
+\end{example}
+
+\begin{example}{}
+Let $f:U\to\mathbb{R}$ be of class $C^\infty$, and $\nabla f(c)\ne 0$. Then, there is a coordinate change $\tilde f$ of $f$ that is linear.\\
+Idea: Use $f$ as one of the new coordinates, since $\nabla f(c)\ne 0$, there exists $k$ such that $\frac{\partial f}{\partial x_k}(c)\ne 0$. We put $u=\phi(x)$, where:
+\[
+(u_1,\cdots,u_n)=(x_1,\cdots,x_{k-1},f(x),x_{k+1},\cdots,x_n).
+\]
+To check that this is a legitimate coordinate change, we look at the Jacobian:
+\[
+D\phi(x)=\begin{pmatrix}1&0&\cdots &0&0\\0&1&\cdots&0&0\\\vdots&\vdots&\ddots&\vdots&\vdots\\\frac{\partial f}{\partial x_1}&\frac{\partial f}{\partial x_2}&\cdots&\frac{\partial f}{\partial x_{n-1}}&\frac{\partial f}{\partial x_n}\\\vdots&\vdots&\ddots&\vdots&\vdots\\0&0&\cdots&1&0\\0&0&\cdots&0&1\end{pmatrix},
+\]
+where $\det D\phi(x)=\frac{\partial f}{\partial x_k}$ is non-zero at $c$, so it is a legitimate coordinate change on some $U_1\ni c$. And in new coordinate, we have:
+\[
+\tilde f(u)=f(\phi^{-1}(u))=f(x)=u_k.
+\]
+In particular, in new coordinate, the level sets $f^{-1}(\mu)$ become affine hyperplanes $\tilde f^{-1}(\mu)$.
+\end{example}
+This explains why level sets $f^{-1}(\mu)$ usually looks nice, which is because the set where $\nabla f(x)\ne 0$ is an open subset of $U$, on which this discussion applies that level sets can be "straightened" by some coordinate change.
+
+\begin{example}{}
+Consider the function:
+\[
+f(x_1,x_2,x_3)=2x_3^2-x_1^2-x_2^2,
+\]
+then let the level sets be $f^{-1}(\mu)$, then:
+\begin{enumerate}
+\item $\mu>0$: Two-sheeted hyperboloids.
+\item $\mu=0$: Double cones.
+\item $\mu<0$: One-sheeted hyperboloids.
+\end{enumerate}
+\end{example}
+
+Now consider the functions:
+\[
+F_i(x,y)=0,~i=1,\cdots,m.
+\]
+We have a system of $m$ equations for $m$ unknown variables $y_1,\cdots,y_m$ depend on the parameters $x_1,\cdots,x_l$. We want to solve for $y_1,\cdots,y_m$ on functions of parameters $x_i$ locally. Then, this gives the Implicit Function Theorem:
+\begin{theorem}{Implicit Function Theorem}
+Let $U\subseteq\mathbb{R}^l\times\mathbb{R}^m$ be open, and let $F\in C^k(U,\mathbb{R}^m)$. Suppose that $(a,b)\in U$ with $F(a,b)=0$ and the matrix of partial derivative $\frac{\partial F}{\partial y}(a,b)$, i.e. $D_yF(a,b)$ is invertible, then there exists open neighborhoods $V_1\ni a$, $W_1\ni b$ such that $V_1\subseteq\mathbb{R}^l,~W_1\subseteq\mathbb{R}^k$, with $V_1\times W_1\subseteq U$, and there exists a function $\phi\in C^k(V_1,\mathbb{R}^m)$ such that $\phi(V_1)\subseteq W$, and:
+\[
+F(x,y)=0\Leftrightarrow y=\phi(x)~\forall(x,y)\in V_1\times W_1.
+\]
+\end{theorem}
+
+\begin{proof}
+The idea of the proof is to make $F:U\subseteq\mathbb{R}^{m+l}\to\mathbb{R}^m$ be part of a coordinate change. Thus, we let:
+\[
+\psi:U\to\mathbb{R}^{m+l},~(x,y)\mapsto(x,F(x,y)).
+\]
+To check that it's an legitmate coordinate change, we consider the Jacobian:
+\[
+D\psi(x,y)=\left(\begin{array}{c|c}
+I_l & 0\\
+\hline 
+D_xF & D_yF
+\end{array}\right),
+\]
+so that $\det D\psi(x,y)=\det(D_yF)\ne 0$, so that $D\psi$ is invertible at $(a,b)$. Thus we apply the Inverse Function Theorem, where $\psi$ gives a $C^k$ diffeomorphism from some  open neighborhood of $(a,b)$ onto some open neighborhood of $\psi(a,b)=(a,F(a,b))=(a,0)$. Let $f(x)=\operatorname{pr}_2(\psi^{-1}(x,0))$, where $\operatorname{pr}_2(x,y)=y$, then by definition:
+\[
+\psi^{-1}(x,0)=(x,f(x))\Leftrightarrow (x,0)=\psi(x,f(x)).
+\]
+This gives that $F(x,f(x))=0$.
+\end{proof}
+
 
 \newpage
 % ====================================================================
