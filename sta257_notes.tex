@@ -1,0 +1,584 @@
+% =====================================================================
+%  STA257 — Probability and Statistics I
+%  Note-Taking Template, organized by Chapter / Section (1, 1.1, 1.2 ...)
+%  --------------------------------------------------------------------
+%  Soft, muted accent colors (not saturated blocks): Definition (blue),
+%  Theorem (amber/yellow), Example (green). Everything else (Lemma,
+%  Proposition, Corollary, Remark, Proof) is PLAIN TEXT with a quiet
+%  left rule — bold title only, no box / background.
+%
+%  Numbering: \section = 1, 2, 3 ...   \subsection = 1.1, 1.2 ...
+%  Boxes are numbered within the section: Definition 1.1, Theorem 1.2 ...
+% =====================================================================
+
+\documentclass[11pt]{article}
+
+% ---------- Page & Fonts ----------
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage{lmodern}      % enable on Overleaf / full TeX installs
+% \usepackage{mathpazo}     % nicer serif math font; enable if available
+% \usepackage{microtype}    % enable if available — nicer justification
+
+% ---------- Math ----------
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+
+% ---------- Colors & Boxes ----------
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+% ---------- Misc ----------
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{framed}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+\usetikzlibrary{arrows.meta}
+
+% ---------- Color palette (soft / muted) ----------
+\definecolor{defColor}{HTML}{5B8DEF}    % soft blue   - Definition
+\definecolor{thmColor}{HTML}{E0A030}    % soft amber  - Theorem
+\definecolor{exColor}{HTML}{4CA37A}     % soft green  - Example
+\definecolor{neutralColor}{HTML}{8B8F98}% soft gray   - text accents
+\definecolor{inkColor}{HTML}{2D3138}    % near-black text
+
+% ---------- Section numbering: 1, 1.1, 1.2, 2, 2.1 ... ----------
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% =====================================================================
+% ---------- The 3 "headline" boxes — soft tinted style ----------
+%  All boxes share ONE counter, numbered within \section:
+%  Definition 1.1, Theorem 1.2, Example 1.3, Lemma 1.4 ...
+% =====================================================================
+\newtcbtheorem[number within=section]{defbox}{Definition}%
+{colback=defColor!5, colframe=defColor!65, fonttitle=\bfseries,
+ coltitle=defColor!75!black, colbacktitle=defColor!12,
+ boxrule=0.6pt, arc=1.5mm,
+ left=6pt, right=6pt, top=4pt, bottom=4pt,
+ breakable, enhanced jigsaw}{def}
+
+\newtcbtheorem[use counter from=defbox]{thmbox}{Theorem}%
+{colback=thmColor!6, colframe=thmColor!70, fonttitle=\bfseries,
+ coltitle=thmColor!60!black, colbacktitle=thmColor!15,
+ boxrule=0.6pt, arc=1.5mm,
+ left=6pt, right=6pt, top=4pt, bottom=4pt,
+ breakable, enhanced jigsaw}{thm}
+
+\newtcbtheorem[use counter from=defbox]{exbox}{Example}%
+{colback=exColor!5, colframe=exColor!65, fonttitle=\bfseries,
+ coltitle=exColor!70!black, colbacktitle=exColor!12,
+ boxrule=0.6pt, arc=1.5mm,
+ left=6pt, right=6pt, top=4pt, bottom=4pt,
+ breakable, enhanced jigsaw}{ex}
+
+% 只要一个 {标题}，标签自动留空；标题可以写 {} 留空
+\newenvironment{definition}[1]{\begin{defbox}{#1}{}}{\end{defbox}}
+\newenvironment{theorem}[1]{\begin{thmbox}{#1}{}}{\end{thmbox}}
+\newenvironment{example}[1]{\begin{exbox}{#1}{}}{\end{exbox}}
+
+% =====================================================================
+% ---------- Everything else: PLAIN (no fill, no frame), with a quiet
+%  vertical rule + generous spacing. Shares the same counter as boxes.
+% =====================================================================
+\newtheoremstyle{quiet}%
+  {12pt}{12pt}%          space above / below
+  {\normalfont}{0pt}%    body font / indent
+  {\bfseries}{.}%        head font / punctuation after head
+  {0.6em}{}%             space after head / custom head-spec
+\theoremstyle{quiet}
+
+\makeatletter
+\newtheorem{proposition}[tcb@cnt@defbox]{Proposition}
+\newtheorem{lemma}[tcb@cnt@defbox]{Lemma}
+\newtheorem{corollary}[tcb@cnt@defbox]{Corollary}
+\makeatother
+
+\newtheoremstyle{quietremark}%
+  {12pt}{12pt}%
+  {\normalfont\itshape}{0pt}%
+  {\bfseries\itshape}{.}%
+  {0.6em}{}
+\theoremstyle{quietremark}
+\newtheorem*{remark}{Remark}
+
+% -- the quiet left-rule "bar" --
+\definecolor{barColor}{HTML}{8B8F98}
+\newenvironment{quietbar}{%
+  \def\FrameCommand{{\color{barColor!55}\vrule width 1.1pt\hspace{9pt}}}%
+  \MakeFramed{\advance\hsize-\width\relax \FrameRestore}%
+}{%
+  \endMakeFramed
+}
+% Auto-wrap every plain statement (and proofs) in the quiet bar.
+\BeforeBeginEnvironment{lemma}{\begin{quietbar}}
+\AfterEndEnvironment{lemma}{\end{quietbar}}
+\BeforeBeginEnvironment{proposition}{\begin{quietbar}}
+\AfterEndEnvironment{proposition}{\end{quietbar}}
+\BeforeBeginEnvironment{corollary}{\begin{quietbar}}
+\AfterEndEnvironment{corollary}{\end{quietbar}}
+\BeforeBeginEnvironment{remark}{\begin{quietbar}}
+\AfterEndEnvironment{remark}{\end{quietbar}}
+\BeforeBeginEnvironment{proof}{\begin{quietbar}}
+\AfterEndEnvironment{proof}{\end{quietbar}}
+
+% Proof ends with a small solid square
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% ---------- Section styling ----------
+\titleformat{\section}
+ {\normalfont\Large\bfseries\color{inkColor}}
+ {\thesection}{0.6em}{}
+ [{\color{neutralColor!35}\titlerule[0.8pt]}]
+\titleformat{\subsection}
+ {\normalfont\large\bfseries\color{inkColor}}
+ {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+ {\normalfont\normalsize\bfseries\color{inkColor}}
+ {\thesubsubsection}{0.6em}{}
+
+% ---------- Hyperref colors ----------
+\hypersetup{
+ colorlinks=true,
+ linkcolor=inkColor,
+ citecolor=exColor,
+ urlcolor=defColor,
+ pdftitle={STA257 Notes},
+ pdfauthor={Fuxuan Xu}
+}
+
+% ---------- Quick math macros (probability) ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\dd}{\mathrm{d}}
+
+\renewcommand{\P}{\mathbb{P}}          % probability   \P(A)
+\newcommand{\E}{\mathbb{E}}            % expectation   \E[X]
+\DeclareMathOperator{\Var}{Var}        % variance      \Var(X)
+\DeclareMathOperator{\Cov}{Cov}        % covariance    \Cov(X,Y)
+\DeclareMathOperator{\Corr}{Corr}      % correlation   \Corr(X,Y)
+\newcommand{\1}{\mathbf{1}}            % indicator     \1_A
+\newcommand{\iid}{\overset{\text{i.i.d.}}{\sim}}
+\newcommand{\cond}{\,\middle|\,}       % use inside \left( ... \right)
+\newcommand{\toP}{\xrightarrow{\;P\;}}         % convergence in probability
+\newcommand{\toas}{\xrightarrow{\;\text{a.s.}\;}}% almost sure convergence
+\newcommand{\toD}{\xrightarrow{\;D\;}}         % convergence in distribution
+
+% Common distributions:  X \sim \Bin(n,p),  \Normal(\mu,\sigma^2) ...
+\DeclareMathOperator{\Bern}{Bernoulli}
+\DeclareMathOperator{\Bin}{Binomial}
+\DeclareMathOperator{\Geom}{Geometric}
+\DeclareMathOperator{\NegBin}{NegBinomial}
+\DeclareMathOperator{\Pois}{Poisson}
+\DeclareMathOperator{\Hyper}{Hypergeometric}
+\DeclareMathOperator{\Unif}{Uniform}
+\DeclareMathOperator{\Expo}{Exponential}
+\DeclareMathOperator{\GammaDist}{Gamma}
+\DeclareMathOperator{\BetaDist}{Beta}
+\newcommand{\Normal}{N}
+
+% =====================================================================
+% ---------------------------- COVER PAGE ------------------------------
+% =====================================================================
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{1.3cm}
+
+{\Large\textsc{Lecture Notes}}\\[0.4cm]
+{\color{neutralColor!50}\rule{0.35\textwidth}{0.6pt}}\\[1.0cm]
+
+{\fontsize{32}{38}\selectfont\bfseries STA257}\\[0.3cm]
+{\Large\itshape Probability and Statistics I}\\[1.0cm]
+
+% ---------------- Probability illustration ----------------
+\begin{tikzpicture}[scale=1.0]
+  % axes
+  \draw[neutralColor!70, -Latex] (-3.2,0) -- (3.4,0) node[right, font=\tiny, inkColor] {$x$};
+  \draw[neutralColor!70, -Latex] (-3.0,-0.1) -- (-3.0,2.6);
+
+  % shaded area under the bell curve:  P(a < X < b)
+  \fill[defColor!18, domain=-0.8:1.3, smooth, variable=\x]
+    (-0.8,0) -- plot ({\x},{2.2*exp(-\x*\x/1.2)}) -- (1.3,0) -- cycle;
+  \draw[defColor!70, thick] (-0.8,0) -- (-0.8,{2.2*exp(-0.64/1.2)});
+  \draw[defColor!70, thick] (1.3,0) -- (1.3,{2.2*exp(-1.69/1.2)});
+  \node[defColor!70!black, font=\tiny] at (0.25,0.55) {$\P(a<X<b)$};
+  \node[inkColor, font=\tiny] at (-0.8,-0.22) {$a$};
+  \node[inkColor, font=\tiny] at (1.3,-0.22) {$b$};
+
+  % the normal density curve
+  \draw[neutralColor!80, thick, domain=-3:3, smooth, samples=80, variable=\x]
+    plot ({\x},{2.2*exp(-\x*\x/1.2)});
+
+  % mean marker
+  \draw[thmColor!70, dashed, thick] (0,0) -- (0,2.2);
+  \node[thmColor!55!black, font=\tiny] at (0.22,2.35) {$\mu$};
+  \node[thmColor!55!black, font=\tiny] at (2.25,1.6) {$f_X(x)$};
+
+  % --- arrow to a small discrete pmf (bar chart) ---
+  \draw[exColor!70, -Latex, thick] (3.0,1.4) .. controls (3.7,1.9) and (4.3,1.6) .. (4.3,1.15);
+  \node[exColor!60!black, font=\tiny] at (3.85,2.05) {discrete};
+  \foreach \k/\h in {0/0.25, 1/0.7, 2/0.95, 3/0.6, 4/0.25}{
+    \fill[exColor!25] ({3.75+0.28*\k},0) rectangle ({3.95+0.28*\k},\h);
+    \draw[exColor!70] ({3.75+0.28*\k},0) rectangle ({3.95+0.28*\k},\h);
+  }
+  \draw[exColor!70] (3.65,0) -- (5.25,0);
+  \node[exColor!60!black, font=\tiny] at (4.45,-0.25) {$p_X(k)$};
+\end{tikzpicture}
+
+\vspace{1.7cm}
+{\large Fuxuan Xu}\\[0.2cm]
+{\large University of Toronto}
+
+\vfill
+
+\begin{tcolorbox}[colback=black!2, colframe=neutralColor!35, width=0.7\textwidth,
+ arc=1.5mm, boxrule=0.4pt]
+\centering\small
+\textbf{How this notebook works}\\[3pt]
+Notes are organized \textbf{by topic} --- chapters (1, 2, \dots) and sections
+(1.1, 1.2, \dots). Only three box types carry
+color --- \textcolor{defColor!75!black}{\textbf{Definition}} (blue),
+\textcolor{thmColor!60!black}{\textbf{Theorem}} (amber), and
+\textcolor{exColor!70!black}{\textbf{Example}} (green) --- kept soft and light
+so they're easy on the eyes. Everything else (Lemma, Proposition, Corollary,
+Remark, Proof) is plain text with a bold label, no box.
+\end{tcolorbox}
+
+\vspace{1.0cm}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section{Probability}
+% =====================================================================
+
+\subsection{Probability Space}
+
+\subsection{The Empirical Law of Large Numbers}
+
+\subsection{Uniform Distribution}
+
+\subsection{Exponential Distribution}
+
+\subsection{Probability Density Functions}
+
+\subsection{Conditional Probability}
+\begin{definition}{Conditional Probability}
+For any two events, $A$ and $B$, for a random variable $W$ defined on a sample space $\Omega$, the conditional probability of $A$ given $B$ is:
+\[
+P(W\in A|W\in B)=\frac{P(W\in AB)}{P(W\in B)},
+\]
+which means that:
+\[
+P(A|B)=\frac{P(AB)}{P(B)},
+\]
+and that:
+\[
+P(AB)=P(A|B)P(B)=P(B|A)P(A).
+\]
+\end{definition}
+
+\begin{theorem}{Bayes' Theorem}
+Given a partition of the sample space $\Omega$ intro non-trivial mutually disjoint events $B_n$, where $n\in\mathbb{N}$, then for any other event $A\subset\Omega$, we obtain:
+\begin{enumerate}
+\item Total probability:
+\[
+\displaystyle P(A)=\sum_{n\in\mathbb{N}}P(A|B_n)P(B_n).
+\]
+\item Bayes' formula:
+\[
+\displaystyle P(B_n|A)=\frac{P(A|B_n)P(B_n)}{P(A)}.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}
+\item Since $A=A\Omega=A\sum_{n=1}^\infty B_n$, we have that:
+\[
+P(A)=\sum_{n=1}^\infty P(AB_n)=\sum_{n=1}^\infty P(A|B_n)P(B_n).
+\]
+\item Since $P(AB_n)=P(A|B_n)P(B_n)$, we have that:
+\[
+\frac{P(AB_n)}{P(A)}=P(B_n|A)=\frac{P(A|B_n)P(B_n)}{P(A)}.
+\]
+\end{enumerate}
+\end{proof}
+
+
+\subsection{Monte Carlo Method}
+
+\newpage
+% =====================================================================
+\section{Expectation}
+% =====================================================================
+
+\subsection{The Linearity of Expectation}
+
+\subsection{Finite Discrete Distribution}
+
+\subsection{The Bernoulli Trial}
+
+\subsection{The Continuous Case}
+
+\subsection{Density and Expectation}
+
+\subsection{Conditional Expectation}
+
+\newpage
+% =====================================================================
+\section{Geometry of Data}
+% =====================================================================
+
+\subsection{The Geometry of Random Variables}
+\begin{definition}{Inner Product, Norm and Metric}
+The three basic elements of Euclidean geometry, expressed in random variables and expectations:
+\begin{enumerate}
+\item Inner product: $\displaystyle\frac{\langle x,y\rangle}{n}=\frac{\sum_{i=1}^n x_iy_i}{n}=EXY$.
+\item Norm: $\displaystyle\frac{\|x\|}{n}=\sqrt{\frac{\langle x,x\rangle}{n}}=\sqrt{EX^2}.$
+\item Metric: $\displaystyle\frac{d(x,y)}{\sqrt{n}}=\frac{\|y-x\|}{\sqrt{n}}=\sqrt{E(Y-X)^2}$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}{$L$ space}
+The random variable space $L$ is a Banach space such that:
+\[
+L=\{X:E|X|<\infty\},
+\]
+where $L$ is a complete metric space, but the inner product does not exist in $L$.
+\end{definition}
+
+\begin{definition}{$L_2$ Space}
+The random variable space $L_2$ is a Hilbert space, and a subspace of $L$, where:
+\[
+L_2=\{X\in L\mid EX^2<\infty\},
+\]
+and the inner product, norm and metric are well-defined on $L_2$.
+\end{definition}
+
+\begin{lemma}
+Let $X,Y$ be random variables, if $X,Y\in L_2$, then $X,Y\in L$ and $XY\in L$.
+\end{lemma}
+
+\begin{proof}
+Let $X,Y\in L_2$, then $EX^2<\infty,~EY^2<\infty$, therefore we have:
+\[
+\displaystyle E|X|<\frac{1+EX^2}{2}<\infty, E|Y|<\frac{1+EY^2}{2}<\infty.
+\] 
+Hence $X,Y\in L$.\\
+Since $\displaystyle|XY|\le \frac{X^2+Y^2}{2}$, we have:
+\[
+\displaystyle E|XY|\le E\left(\frac{X^2+Y^2}{2}\right)=\frac{EX^2}{2}+\frac{EY^2}{2}<\infty.
+\]
+Hence, $XY\in L$.
+\end{proof}
+
+\begin{lemma}
+Let $X,Y$ be random variables, if $X,Y\in L_2$, then $X+Y\in L_2$.
+\end{lemma}
+
+\begin{proof}
+Let $X,Y\in L_2$, then $EX^2<\infty, EY^2<\infty$. By Cauchy-Schwarz:
+\[
+EXY\le E|XY|\le\sqrt{EX^2EY^2}<\infty.
+\]
+Hence, we have:
+\[
+\begin{aligned}
+E(X+Y)^2&=E(X^2+2XY+Y^2)\\&=EX^2+2EXY+EY^2\\&<\infty.
+\end{aligned}
+\]
+Hence, $X+Y\in L_2$.
+\end{proof}
+
+\begin{lemma}{Properties of $EXY$ as an Inner Product}
+The expectation $EXY$ satisfies the following three properties of an inner product:
+\begin{enumerate}
+\item Bilinearity: $\langle a_1X_1+a_2X_2,Y\rangle=E(a_1X_1+a_2X_2)Y=a_1\langle X_1,Y\rangle+a_2\langle X_2,Y\rangle.$
+\item Symmetry: $\langle X,Y\rangle=EXY=EYX=\langle Y,X\rangle.$
+\item PSD: $\langle X,X\rangle=EX^2\ge 0.$
+\end{enumerate}
+\end{lemma}
+
+\subsection{Markov and Chebyshev Inequalities}
+\begin{theorem}{Markov's Inequality}
+Let $X$ be a random variable, let $X\ge 0$ and $t\ge 0$, then for nondecreasing $g:\mathbb{R}_{\ge 0}\to\mathbb{R}_{\ge 0}$, we have:
+\[
+P(X\ge t)\le\frac{Eg(X)}{g(t)}.
+\]
+\end{theorem}
+
+\begin{proof}
+Take an arbitrary nonnegative random variable $X\ge 0$, an arbitrary $t\in\mathbb{R}_{\ge 0}$ and a nondecreasing function $g:\mathbb{R}_{\ge 0}\to\mathbb{R}_{\ge 0}$, then obviously:
+\[
+g(t)I(X\ge t)\le g(X).
+\]
+Apply $E$ to both sides:
+\[
+g(t)P(X\ge t)\le Eg(X)
+\]
+Hence, $\displaystyle P(X\ge t)\le\frac{Eg(X)}{g(t)}$.
+\end{proof}
+\newpage
+\begin{corollary}[Chebyshev Inequalities]
+Let $X\in L_2$, $\varepsilon>0$, $\mu=EX$, $\sigma=\sqrt{(X-EX)^2}$, and $\displaystyle k=\frac{\varepsilon}{\sigma}>0$, then we have:
+\begin{enumerate}
+\item Chebyshev I: 
+\[
+\displaystyle P(|X-\mu|\ge \varepsilon)\le\frac{\sigma^2}{\varepsilon^2}.
+\]
+\item Chebyshev II: 
+\[
+\displaystyle P\left(\frac{X-\mu}{\sigma}\ge k\right)\le \frac{1}{k^2}.
+\]
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}[Proof of Chebyshev I]
+Let $X\in :_2$ and $\mu=EX$. Let $Y=(X-\mu)^2$, then $EY=\sqrt{(X-EX)^2}=\sigma^2$. Hence:
+\[
+P(|X-\mu|\ge \varepsilon)=P(|X-\mu|^2\ge\varepsilon^2)\le\frac{E(x-\mu)^2}{\varepsilon^2},
+\]
+since $\sigma=\sqrt{(X-EX)^2}$:
+\[
+P(|X-\mu|\ge\varepsilon)\le\frac{E(x-\mu)^2}{\varepsilon^2}=\frac{\sigma^2}{\varepsilon^2}.
+\]
+\end{proof}
+
+\begin{proof}[Proof of Chebyshev II]
+Let $\displaystyle k=\frac{\varepsilon}{\sigma}$, then:
+\[
+P\left(\frac{X-\mu}{\sigma}\ge k\right)=P\left(\frac{X-\mu}{\sigma}\ge\frac{\varepsilon}{\sigma}\right)=P(X-\mu\ge\varepsilon)
+\]
+By Chebyshev I:
+\[
+P\left(\frac{X-\mu}{\sigma}\right)=P(X-\mu\ge\varepsilon)\le P(|X-\mu|\ge\varepsilon)\le\frac{\sigma^2}{\varepsilon^2}=\frac{1}{k^2}.
+\]
+\end{proof}
+\begin{definition}{$X$ Equals $Y$ wP1}
+Let $X, Y$ be two random variables.
+We say $X \overset{\text{wP1}}{=} Y$ iff
+\[
+P(\{\omega \in \Omega : X(\omega) = Y(\omega)\}) = 1,
+\]
+i.e.\ $P(X = Y) = 1$.
+\end{definition}
+
+\begin{corollary}[Markov's Equality]
+$X \overset{\text{wP1}}{=} 0\iff E|X|=0$
+\end{corollary}
+
+\subsection{The Geometry of $L_2$}
+\begin{definition}{Orthogonality}
+Let $X,Y\in L_2$, then we say $X$ is orthogonal to $Y$, denoted $X\perp Y$, if: 
+\[
+\|Y-X\|=\|Y+X\|, \text{ i.e. }\langle X,Y\rangle=EXY=0.
+\]
+\end{definition}
+
+\begin{definition}{Orthogonal Projection}
+Let $Y\in L_2$, then $\widehat Y$ is the orthogonal projection of $Y$ on $X$ if:
+\begin{enumerate}
+\item $\widehat Y=tx$ for some $t\in\mathbb{R}$.
+\item $Y-\widehat Y\perp X$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}{The Cosine of the Angle Between Two Random Variables}
+Let $\theta$ be the angle between two random variables $X,Y\in L_2$, then:
+\[
+\cos\theta(X,Y)=\frac{EXY}{\sqrt{EX^2EY^2}}.
+\]
+\end{definition}
+\begin{lemma}[Cauchy-Schwarz Inequalities]
+There are three variations of the Cauchy-Schwarz Inequality:
+\begin{enumerate}
+\item Cauchy-Schwarz I: $\|\widehat Y\|\le\|Y\|\iff Y\overset{\text{wP1}}{=}\widehat Y $.
+\item Cauchy-Schwarz II: $EXY\le\sqrt{EX^2EY^2} \iff Y\overset{\text{wP1}}{=}tX\text{ for some }t\in\mathbb{R}$.
+\item Cauchy-Schwarz III: $|\cos\theta(x,y)|\le 1\iff Y\overset{\text{wP1}}{=}tX\text{ for some }t\in \mathbb{R}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}[Triangle Inequality]
+$\|X+Y\|\le\|X\|+\|Y\| \iff Y\overset{\text{wP1}}{=}tX\text{ for some }t\in \mathbb{R_{\ge 0}}$.
+\end{lemma}
+
+\subsection{Mean, Variance and Standard Deviation}
+
+\subsection{Covariance and Correlation}
+
+\subsection{The Linear Model}
+
+\newpage
+% =====================================================================
+\section{Types of Distributions}
+% =====================================================================
+
+\subsection{Joint Distribution and Statistical Independence}
+\begin{definition}{Statistical Independence}
+Let $X,Y$ be random variables, then $X$ is statistical independent to $Y$, denoted $X\perp\!\!\!\!\perp Y$ iff:
+\[
+P(X\in A|Y\in B)=P(X\in A).
+\]
+\end{definition}
+
+\begin{proposition}[Properties of Statistical Independence]
+
+\end{proposition}
+
+\subsection{Gamma Distribution}
+
+\subsection{Beta Distribution}
+
+\subsection{Binomial Distribution}
+
+\subsection{Multinomial Distribution}
+
+\subsection{Geometric and Hypergeometric Distribution}
+
+\subsection{Normal Distribution}
+
+\newpage
+% =====================================================================
+\section{Types of Convergence}
+% =====================================================================
+
+\subsection{L-Convergence}
+
+\subsection{Convergence in Probability}
+
+\subsection{Convergence with Probability 1}
+
+\subsection{Convergence in Distribution}
+
+\subsection{Weak Convergence}
+
+\newpage
+% =====================================================================
+\section*{Notes \& Questions}
+\addcontentsline{toc}{section}{Notes \& Questions}
+% =====================================================================
+
+\begin{tcolorbox}[colback=black!2, colframe=neutralColor!40, arc=1.5mm, breakable]
+\begin{itemize}[leftmargin=*]
+  \item[$\square$] 
+  \item[$\square$] 
+  \item[$\square$] 
+\end{itemize}
+\end{tcolorbox}
+
+\end{document}
+
